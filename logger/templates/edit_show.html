@@ -1,6 +1,6 @@
 
 <ul>
   {% for episode in episode_list %}
-  <li> {{ episode }} </li>
+  <li> <a href="/logger/episode/{{episode.id}}">{{ episode }}</a> </li>
   {% endfor %}
 </ul>

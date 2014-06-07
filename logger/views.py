@@ -12,3 +12,10 @@ class EditShowView(ListView):
     def get_queryset(self):
         self.show = get_object_or_404(Show, id=self.kwargs['pk'])
         return Episode.objects.filter(show=self.show)
+
+class EditEpisodeView(ListView):
+    template_name = "edit_episode.html"
+
+    def get_queryset(self):
+        self.ep = get_object_or_404(Episode, id=self.kwargs['pk'])
+        return Segment.objects.filter(episode=self.ep)
