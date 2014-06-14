@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 db.sqlite3
+.DS_Store
+static/bootstrap/
+bootstrap/dist
+bootstrap/docs/dist

@@ -1,7 +1,10 @@
+{% extends "base.html" %}
 
+{% block content %}
+<h2>{{episode}}</h2>
 <ul>
-  <h2>{{episode}}</h2>
   {% for segment in segment_list %}
   <li> {{ segment }} </li>
   {% endfor %}
 </ul>
+{% endblock %}
