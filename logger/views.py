@@ -23,44 +23,29 @@ class EditShowView(ListView):
         return ctx
 
 
-class EpisodeSegmentsView(ListView):
-    template_name = "edit_episode.html"
-
-    def get_queryset(self):
-        self.ep = get_object_or_404(Episode, id=self.kwargs['pk'])
-        return Segment.objects.filter(episode=self.ep)
-
-    def get_context_data(self, **kwargs):
-        ctx = super(EpisodeSegmentsView, self).get_context_data(**kwargs)
-        ctx['episode'] = self.ep
-        ctx['form'] = SegmentForm()
-        return ctx
-
-
 class SegmentForm(ModelForm):
     class Meta:
         model = Segment
         fields = ['song', 'time']
 
 
-class AddSegmentView(CreateView):
-    model = Segment
+class EditEpisodeView(CreateView):
+    template_name = "edit_episode.html"
     form_class = SegmentForm
-    template_name = 'edit_episode.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(EditEpisodeView, self).get_context_data(**kwargs)
+        ctx['episode'] = get_object_or_404(Episode, id=self.kwargs['pk'])
+        ctx['segment_list'] = Segment.objects.filter(episode=ctx['episode'])
+        return ctx
 
     def form_valid(self, form):
         form.instance.episode_id = self.kwargs['pk']
-        return super(AddSegmentView, self).form_valid(form)
+        return super(EditEpisodeView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('edit-episode', kwargs={'pk': self.object.episode.pk})
 
 
-class EditEpisodeView(View):
-    def get(self, request, *args, **kwargs):
-        view = EpisodeSegmentsView.as_view()
-        return view(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        view = AddSegmentView.as_view()
-        return view(request, *args, **kwargs)
+
