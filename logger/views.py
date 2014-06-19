@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, CreateView, View
 from django.forms import ModelForm
+from django.core.urlresolvers import reverse
 from logger.models import Show, Episode, Segment, Song
 
 
@@ -44,6 +45,9 @@ class SegmentForm(ModelForm):
 class AddSegmentView(CreateView):
     model = Segment
     form_class = SegmentForm
+
+    def get_success_url(self):
+        return reverse('edit-episode', kwargs={'pk': self.object.episode.pk})
 
 
 class EditEpisodeView(View):
