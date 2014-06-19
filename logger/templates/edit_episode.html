@@ -2,6 +2,11 @@
 
 {% block content %}
 <h2>{{episode}}</h2>
+<form method="POST" action="">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit">
+</form>
 <ul>
   {% for segment in segment_list %}
   <li> {{ segment }} </li>
