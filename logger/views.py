@@ -40,11 +40,17 @@ class EpisodeSegmentsView(ListView):
 class SegmentForm(ModelForm):
     class Meta:
         model = Segment
+        fields = ['song', 'time']
 
 
 class AddSegmentView(CreateView):
     model = Segment
     form_class = SegmentForm
+    template_name = 'edit_episode.html'
+
+    def form_valid(self, form):
+        form.instance.episode_id = self.kwargs['pk']
+        return super(AddSegmentView, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('edit-episode', kwargs={'pk': self.object.episode.pk})

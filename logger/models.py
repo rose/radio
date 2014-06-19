@@ -30,7 +30,7 @@ class Song(Model):
 class Segment(Model):
     episode = ForeignKey(Episode)
     song = ForeignKey(Song)
-    time = TimeField(auto_now_add=True, editable=True)
+    time = TimeField(editable=True)
 
     def __str__(self):
         return "%s %s %s" % (self.song.title, self.episode.show.title, self.time)
