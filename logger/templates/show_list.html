@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+  {% block crumbs %}
+    <ul class="breadcrumb">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li class="active">Shows</li>
+    </ul>
+    {% endblock %}
+ 
 {% block content %}
 <ul>
   {% for show in show_list %}

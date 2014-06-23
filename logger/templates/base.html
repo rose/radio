@@ -6,6 +6,12 @@
   </head>
 
   <body>
+    {% block crumbs %}
+    <ul class="breadcrumb">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li class="active">Shows</li>
+    </ul>
+    {% endblock %}
     {% block content %}
     {% endblock %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

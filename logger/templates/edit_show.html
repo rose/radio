@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
+
+  {% block crumbs %}
+    <ul class="breadcrumb">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li><a href="{% url "shows" %}">Shows</a></li>
+      <li class="active">{{show}}</li>
+    </ul>
+    {% endblock %}
+ 
+
 {% block content %}
 <ul>
   <h2>{{ show }}</h2>

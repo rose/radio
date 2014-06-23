@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 
+  {% block crumbs %}
+    <ul class="breadcrumb">
+      <li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li><a href="{% url "shows" %}">Shows</a></li>
+      <li><a href="{% url "edit-show" episode.show.id %}">{{episode.show}}</a></li>
+      <li class="active">{{episode.air_date}}</li>
+    </ul>
+    {% endblock %}
+ 
 {% block content %}
 <h2>{{episode}}</h2>
 <form method="POST" action="">
