@@ -26,7 +26,6 @@ class EditShowView(ListView):
 class SegmentForm(ModelForm):
     class Meta:
         model = Segment
-        fields = ['song', 'time']
 
 
 class EditEpisodeView(CreateView):
