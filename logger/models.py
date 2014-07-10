@@ -122,22 +122,6 @@ class Segment(Model):
     seg_type = ForeignKey(ContentType)
     seg_id = PositiveIntegerField()
     seg_content = GenericForeignKey('seg_type', 'seg_id')
-    #seg_type = IntegerField(
-            #max_length = 3,
-            #choices = (
-                #(1, "Song"),
-                #(2, "Station ID"),
-                #(3, "Advertisement"),
-                #(4, "Other")
-            #),
-            #default = 4
-    #) 
-
-    # TODO use generic foreign keys to make a union
-    #ad = ForeignKey(Advertisement)
-    #song = ForeignKey(Song)
-    #stationID = ForeignKey(StationID)
-    #other = ForeignKey(Other) 
 
     def __str__(self):
         return "Segment: %s %s [%s]" % (self.seg_content, self.episode.show.title, str(self.time)[:8])
