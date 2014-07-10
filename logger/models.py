@@ -74,6 +74,7 @@ class Advertisement(Model):
 class Song(Model):
     title = CharField(max_length=40)
     artist = CharField(max_length=40)
+    composer = CharField(max_length=40)
     length = DurationField()
 
     category_3 = BooleanField(default=False)
