@@ -10,17 +10,27 @@ class ListShowView(ListView):
     template_name = "show_list.html"
 
 
-class EditShowView(ListView):
-    template_name = "edit_show.html"
+class EpisodeForm(ModelForm):
+    class Meta:
+        model = Episode
 
-    def get_queryset(self):
-        self.show = get_object_or_404(Show, id=self.kwargs['pk'])
-        return Episode.objects.filter(show=self.show)
+
+class EditShowView(CreateView):
+    template_name = "edit_show.html"
+    form_class = EpisodeForm
 
     def get_context_data(self, **kwargs):
         ctx = super(EditShowView, self).get_context_data(**kwargs)
-        ctx['show'] = self.show
+        ctx['show'] = get_object_or_404(Show, id=self.kwargs['pk'])
+        ctx['episode_list'] = Episode.objects.filter(show=ctx['show'])
         return ctx
+
+    def form_valid(self, form):
+        form.instance.show_id = self.kwargs['pk']
+        return super(EditShowView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('edit-show', kwargs={'pk': self.object.show.pk})
 
 
 class SegmentForm(ModelForm):
