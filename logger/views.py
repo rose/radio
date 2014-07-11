@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, CreateView, View
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
-from logger.models import Show, Episode, Segment, Song
+from logger.models import Show, Episode, Segment, Song, Advertisement, StationID, Other
 
 
 class ListShowView(ListView):
@@ -36,6 +36,23 @@ class EditShowView(CreateView):
 class SegmentForm(ModelForm):
     class Meta:
         model = Segment
+        fields = ['time',]
+
+class SongForm(ModelForm):
+    class Meta:
+        model = Song
+
+class AdForm(ModelForm):
+    class Meta:
+        model = Advertisement
+
+class IdForm(ModelForm):
+    class Meta:
+        model = StationID
+
+class OtherForm(ModelForm):
+    class Meta:
+        model = Other
 
 
 class EditEpisodeView(CreateView):
@@ -46,6 +63,7 @@ class EditEpisodeView(CreateView):
         ctx = super(EditEpisodeView, self).get_context_data(**kwargs)
         ctx['episode'] = get_object_or_404(Episode, id=self.kwargs['pk'])
         ctx['segment_list'] = Segment.objects.filter(episode=ctx['episode'])
+        ctx['forms'] = [SongForm(), AdForm(), IdForm(), OtherForm()]
         return ctx
 
     def form_valid(self, form):

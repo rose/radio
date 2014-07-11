@@ -11,13 +11,20 @@
  
 {% block content %}
 <h2>{{episode}}</h2>
+<div id='segforms' class='tab-conten'>
+{% for typeform in forms %}
+<div class='tab-pane' id='{{typeform.meta.model}}'>
 <form method="POST" action="">
+{% csrf_token %}
 <ul class="list-inline">
-  {% csrf_token %}
   {{ form.as_ul }}
+  {{ typeform.as_ul }}
   <input class="btn btn-primary" type="submit">
 </ul>
 </form>
+</div>
+{% endfor %}
+</div>
 <ul>
   {% for segment in segment_list reversed %}
   <li> {{ segment }} </li>
