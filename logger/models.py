@@ -63,6 +63,9 @@ class Advertisement(Model):
             ),
             default=52
     )
+
+    def cname(self):
+      return self.__class__.__name__
     
     def __str__(self):
         return "Ad:  %s, Category %d" % (self.advertiser, self.category)
@@ -91,6 +94,9 @@ class Song(Model):
     # instrumental pieces must be marked!  Do it here.
     language = CharField(max_length=20, default="english")
 
+    def cname(self):
+      return self.__class__.__name__
+
     def __str__(self):
         return "Song: %s (%s) [%s]" % (self.title, self.artist, str(self.length)[:7])
 
@@ -98,6 +104,9 @@ class Song(Model):
 # category 1 (if spoken) or 4 (if recorded musical)
 class StationID(Model):
     spoken = BooleanField(default=True)
+
+    def cname(self):
+      return self.__class__.__name__
 
     def __str__(self):
         if self.spoken:
@@ -110,6 +119,9 @@ class StationID(Model):
 class Other(Model):
     spoken = BooleanField(default = True)
     description = CharField(max_length=120)
+
+    def cname(self):
+      return self.__class__.__name__
 
     def __str__(self):
         return "Other: %s" % self.description

@@ -11,9 +11,14 @@
  
 {% block content %}
 <h2>{{episode}}</h2>
-<div id='segforms' class='tab-conten'>
+<ul class='nav nav-tabs'>
+  {% for typeform in forms %}
+  <li{% if typeform.Meta.model.cname == 'Song' %} class='active'{% endif %}><a href='#{{typeform.Meta.model.cname}}' data-toggle='tab'>{{typeform.Meta.model.cname}}</a></li>
+  {% endfor %}
+</ul>
+<div id='segforms' class='tab-content'>
 {% for typeform in forms %}
-<div class='tab-pane' id='{{typeform.meta.model}}'>
+<div class='tab-pane{% if typeform.Meta.model.cname == 'Song' %} active{% endif %}' id='{{typeform.Meta.model.cname}}'>
 <form method="POST" action="">
 {% csrf_token %}
 <ul class="list-inline">
