@@ -17,6 +17,7 @@ class ListShowView(ListView):
 class EpisodeForm(ModelForm):
     class Meta:
         model = Episode
+        fields = ['air_date', 'air_time']
 
 
 class EditShowView(CreateView):
