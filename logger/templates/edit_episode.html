@@ -13,12 +13,12 @@
 <h2>{{episode}}</h2>
 <ul class='nav nav-tabs'>
   {% for typeform in forms %}
-  <li{% if typeform.Meta.model.cname == 'Song' %} class='active'{% endif %}><a href='#{{typeform.Meta.model.cname}}' data-toggle='tab'>{{typeform.Meta.model.cname}}</a></li>
+  <li{% if typeform.Meta.model.cname == seg_type %} class='active'{% endif %}><a href='#{{typeform.Meta.model.cname}}' data-toggle='tab'>{{typeform.Meta.model.cname}}</a></li>
   {% endfor %}
 </ul>
 <div id='segforms' class='tab-content'>
 {% for typeform in forms %}
-<div class='tab-pane{% if typeform.Meta.model.cname == 'Song' %} active{% endif %}' id='{{typeform.Meta.model.cname}}'>
+<div class='tab-pane{% if typeform.Meta.model.cname == seg_type %} active{% endif %}' id='{{typeform.Meta.model.cname}}'>
 <form method="POST" action="">
 {% csrf_token %}
 <input type='hidden' name='seg_type' value='{{typeform.Meta.model.cname}}'>
