@@ -41,7 +41,6 @@ class Episode(Model):
     show = ForeignKey(Show)
     air_date = DateField()
     air_time = TimeField()
-    end_time = TimeField()
 
     def __str__(self):
         return "%s (%s %s)" % (self.show.title, self.air_date, self.air_time)
@@ -53,6 +52,7 @@ class Episode(Model):
 # category 5
 class Advertisement(Model):
     advertiser = CharField(max_length=40)
+    length = DurationField()
 
     # required by section 8.1.c.v
     category = IntegerField(
@@ -104,6 +104,7 @@ class Song(Model):
 # category 1 (if spoken) or 4 (if recorded musical)
 class StationID(Model):
     spoken = BooleanField(default=True)
+    length = DurationField()
 
     def cname(self):
       return self.__class__.__name__
@@ -119,6 +120,7 @@ class StationID(Model):
 class Other(Model):
     spoken = BooleanField(default = True)
     description = CharField(max_length=120)
+    length = DurationField()
 
     def cname(self):
       return self.__class__.__name__
