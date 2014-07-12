@@ -1,7 +1,10 @@
+import sys
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, CreateView, View
 from django.forms import ModelForm
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponseRedirect
 from logger.models import Show, Episode, Segment, Song, Advertisement, StationID, Other
 
 
@@ -64,6 +67,7 @@ class EditEpisodeView(CreateView):
         ctx['episode'] = get_object_or_404(Episode, id=self.kwargs['pk'])
         ctx['segment_list'] = Segment.objects.filter(episode=ctx['episode'])
         ctx['forms'] = [SongForm(), AdForm(), IdForm(), OtherForm()]
+        ctx['seg_type'] = 'Song'
         return ctx
 
     def form_valid(self, form):
@@ -71,7 +75,29 @@ class EditEpisodeView(CreateView):
         return super(EditEpisodeView, self).form_valid(form)
 
     def get_success_url(self):
+        print(self.object, file=sys.stderr)
         return reverse('edit-episode', kwargs={'pk': self.object.episode.pk})
+
+    def post(self, request, *args, **kwargs):
+      self.object = None
+      if request.POST['seg_type'] == 'Other':
+        subseg = OtherForm(**self.get_form_kwargs())
+
+      if not subseg.is_valid():
+         return self.form_invalid(subseg)
+      else:
+         created_sub = subseg.save()
+         segargs = {
+             'episode':get_object_or_404(Episode,id=self.kwargs['pk']),
+             'time': request.POST['time'],
+             'seg_type': ContentType.objects.get_for_model(created_sub.__class__),
+             'seg_id': created_sub.pk}
+         segment = Segment(**segargs)
+         segment.full_clean() #TODO add try/catch to deal with validation
+         self.object = segment.save()
+         return HttpResponseRedirect(reverse('edit-episode', kwargs={'pk': self.kwargs['pk'],}))#'seg_type':request.POST['seg_type']}))
+
+
 
 
 

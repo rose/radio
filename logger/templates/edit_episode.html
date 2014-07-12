@@ -21,10 +21,11 @@
 <div class='tab-pane{% if typeform.Meta.model.cname == 'Song' %} active{% endif %}' id='{{typeform.Meta.model.cname}}'>
 <form method="POST" action="">
 {% csrf_token %}
+<input type='hidden' name='seg_type' value='{{typeform.Meta.model.cname}}'>
 <ul class="list-inline">
+  <input class="btn btn-primary" type="submit">
   {{ form.as_ul }}
   {{ typeform.as_ul }}
-  <input class="btn btn-primary" type="submit">
 </ul>
 </form>
 </div>
