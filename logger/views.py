@@ -78,10 +78,6 @@ class EditEpisodeView(CreateView):
         form.instance.episode_id = self.kwargs['pk']
         return super(EditEpisodeView, self).form_valid(form)
 
-    def get_success_url(self):
-        print(self.object, file=sys.stderr)
-        return reverse('edit-episode', kwargs={'pk': self.object.episode.pk})
-
     def post(self, request, *args, **kwargs):
       self.object = None
       time = request.POST['time']
