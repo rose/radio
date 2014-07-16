@@ -83,6 +83,7 @@ class EditEpisodeView(CreateView):
         form.instance.episode_id = self.kwargs['pk']
         return super(EditEpisodeView, self).form_valid(form)
 
+
     def post(self, request, *args, **kwargs):
         self.object = None
         seg_type = request.POST['seg_type']
@@ -92,17 +93,12 @@ class EditEpisodeView(CreateView):
         ctx = self.get_context_data(pk=episode_pk, seg_type=seg_type)
 
         seg_form = SegmentForm( {'time': time} )
-
-
         if seg_type == 'Song':
             content_form = SongForm(**self.get_form_kwargs())
-
         elif seg_type == 'Advertisement':
             content_form = AdForm(**self.get_form_kwargs())
-
         elif seg_type == 'StationID':
             content_form = IdForm(**self.get_form_kwargs())
-
         elif seg_type == 'Other':
             content_form = OtherForm(**self.get_form_kwargs())
 
