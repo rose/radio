@@ -67,7 +67,8 @@ class EditEpisodeView(CreateView):
     def get_context_data(self, **kwargs):
         ctx = super(EditEpisodeView, self).get_context_data(**kwargs)
         ctx['episode'] = get_object_or_404(Episode, id=self.kwargs['pk'])
-        ctx['segment_list'] = Segment.objects.filter(episode=ctx['episode'])
+        #TODO sorting by time will be wrong for shows that cross midnight
+        ctx['segment_list'] = Segment.objects.filter(episode=ctx['episode']).order_by('time')
         ctx['forms'] = [kwargs.get('Song',SongForm()),
             kwargs.get('Advertisement',AdForm()), 
             kwargs.get('StationID',IdForm()), 
