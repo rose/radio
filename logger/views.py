@@ -89,27 +89,27 @@ class EditEpisodeView(CreateView):
 
 
         if seg_type == 'Song':
-            subseg = SongForm(**self.get_form_kwargs())
+            content_form = SongForm(**self.get_form_kwargs())
             form_idx = 0
 
         elif seg_type == 'Advertisement':
-            subseg = AdForm(**self.get_form_kwargs())
+            content_form = AdForm(**self.get_form_kwargs())
             form_idx = 1
 
         elif seg_type == 'StationID':
-            subseg = IdForm(**self.get_form_kwargs())
+            content_form = IdForm(**self.get_form_kwargs())
             form_idx = 2
 
         elif seg_type == 'Other':
-            subseg = OtherForm(**self.get_form_kwargs())
+            content_form = OtherForm(**self.get_form_kwargs())
             form_idx = 3
 
-        if not subseg.is_valid() or not seg_form.is_valid():
+        if not content_form.is_valid() or not seg_form.is_valid():
             ctx['form'] = seg_form
-            ctx['forms'][form_idx] = subseg
+            ctx['forms'][form_idx] = content_form
             return self.render_to_response(ctx)
 
-        created_sub = subseg.save() #TODO Check for song in db
+        created_sub = content_form.save() #TODO Check for song in db
 
         segargs = {
             'episode': get_object_or_404(Episode, id=episode_pk),
