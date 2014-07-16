@@ -85,13 +85,29 @@ class EditEpisodeView(CreateView):
 
         ctx = self.get_context_data(pk=episode_pk, seg_type=seg_type)
 
-        if seg_type == 'Other':
-            subseg = OtherForm(**self.get_form_kwargs())
+        seg_form = SegmentForm( {'time': time} )
 
-            if not subseg.is_valid():
-                ctx['form'] = SegmentForm(initial = {'time': time})
-                ctx['forms'][3] = subseg
-                return self.render_to_response(ctx)
+
+        if seg_type == 'Song':
+            subseg = SongForm(**self.get_form_kwargs())
+            form_idx = 0
+
+        elif seg_type == 'Advertisement':
+            subseg = AdForm(**self.get_form_kwargs())
+            form_idx = 1
+
+        elif seg_type == 'StationID':
+            subseg = IdForm(**self.get_form_kwargs())
+            form_idx = 2
+
+        elif seg_type == 'Other':
+            subseg = OtherForm(**self.get_form_kwargs())
+            form_idx = 3
+
+        if not subseg.is_valid() or not seg_form.is_valid():
+            ctx['form'] = seg_form
+            ctx['forms'][form_idx] = subseg
+            return self.render_to_response(ctx)
 
         created_sub = subseg.save() #TODO Check for song in db
 
@@ -99,15 +115,9 @@ class EditEpisodeView(CreateView):
             'episode': get_object_or_404(Episode, id=episode_pk),
             'time': time, 
             'seg_type': ContentType.objects.get_for_model(created_sub.__class__),
-            'seg_id': created_sub.pk}
+            'seg_id': created_sub.pk
+        }
         segment = Segment(**segargs)
-
-        #TODO make time field show invalid message for bad times
-        try:
-            segment.full_clean() 
-        except ValidationError:
-            ctx['form'] = SegmentForm(instance=segment)
-            return self.render_to_response(ctx)
 
         self.object = segment.save()
         ctx['form'] = SegmentForm()
