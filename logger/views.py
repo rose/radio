@@ -66,13 +66,10 @@ class EditEpisodeView(CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(EditEpisodeView, self).get_context_data(**kwargs)
-        ctx['episode'] = get_object_or_404(Episode, id=self.kwargs['pk'])
+        ctx['episode'] = get_object_or_404(Episode, id = self.kwargs['pk'])
         #TODO sorting by time will be wrong for shows that cross midnight
-        ctx['segment_list'] = Segment.objects.filter(episode=ctx['episode']).order_by('time')
-        ctx['forms'] = [kwargs.get('Song',SongForm()),
-            kwargs.get('Advertisement',AdForm()), 
-            kwargs.get('StationID',IdForm()), 
-            kwargs.get('Other',OtherForm())]
+        ctx['segment_list'] = Segment.objects.filter(episode = ctx['episode']).order_by('time')
+        ctx['forms'] = [ SongForm(), AdForm(), IdForm(), OtherForm() ]
         ctx['seg_type'] = kwargs.get('seg_type', 'Song')
         return ctx
 
@@ -81,28 +78,39 @@ class EditEpisodeView(CreateView):
         return super(EditEpisodeView, self).form_valid(form)
 
     def post(self, request, *args, **kwargs):
-      self.object = None
-      time = request.POST['time']
-      seg_type = request.POST['seg_type'] 
-      eppk = self.kwargs['pk']
-      if seg_type == 'Other':
-        subseg = OtherForm(**self.get_form_kwargs())
-        if not subseg.is_valid():
-           return self.render_to_response(
-               self.get_context_data(pk=eppk,seg_type=seg_type,Other=subseg,form=SegmentForm(initial={'time':time})))
-           
-      created_sub = subseg.save() #TODO Check for song in db
-      segargs = {
-          'episode':get_object_or_404(Episode,id=eppk),
-          'time': time, 
-          'seg_type': ContentType.objects.get_for_model(created_sub.__class__),
-          'seg_id': created_sub.pk}
-      segment = Segment(**segargs)
-      try:
-        segment.full_clean() #TODO add try/catch to deal with validation
-      except ValidationError:
-        return self.render_to_response(self.get_context_data(pk=eppk,seg_type=seg_type,form=SegmentForm(instance=segment)))
-      self.object = segment.save()
-      return self.render_to_response(self.get_context_data(pk=eppk,seg_type=seg_type,form=SegmentForm))
+        self.object = None
+        seg_type = request.POST['seg_type']
+        time = request.POST['time']
+        episode_pk = self.kwargs['pk']
+
+        ctx = self.get_context_data(pk=episode_pk, seg_type=seg_type)
+
+        if seg_type == 'Other':
+            subseg = OtherForm(**self.get_form_kwargs())
+
+            if not subseg.is_valid():
+                ctx['form'] = SegmentForm(initial = {'time': time})
+                ctx['forms'][3] = subseg
+                return self.render_to_response(ctx)
+
+        created_sub = subseg.save() #TODO Check for song in db
+
+        segargs = {
+            'episode': get_object_or_404(Episode, id=episode_pk),
+            'time': time, 
+            'seg_type': ContentType.objects.get_for_model(created_sub.__class__),
+            'seg_id': created_sub.pk}
+        segment = Segment(**segargs)
+
+        #TODO make time field show invalid message for bad times
+        try:
+            segment.full_clean() 
+        except ValidationError:
+            ctx['form'] = SegmentForm(instance=segment)
+            return self.render_to_response(ctx)
+
+        self.object = segment.save()
+        ctx['form'] = SegmentForm()
+        return self.render_to_response(ctx)
 
 
