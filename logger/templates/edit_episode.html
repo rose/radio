@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load dict_access %}
 
   {% block crumbs %}
     <ul class="breadcrumb">
@@ -11,21 +12,29 @@
  
     {% block content %}
     <h2>{{episode}}</h2>
+
     <ul class='nav nav-tabs'>
-      {% for typeform in forms %}
-      <li{% if typeform.Meta.model.cname == seg_type %} class='active'{% endif %}><a href='#{{typeform.Meta.model.cname}}' data-toggle='tab'>{{typeform.Meta.model.cname}}</a></li>
+      {% for seg_name in ordered_names %}
+      <li{% if seg_name == seg_type %} class='active'{% endif %}>
+        <a href='#{{ seg_name }}' data-toggle='tab'>
+          {{ seg_name }}
+        </a>
+      </li>
       {% endfor %}
     </ul>
+
     <div id='segforms' class='tab-content'>
-      {% for typeform in forms %}
-      <div class='tab-pane{% if typeform.Meta.model.cname == seg_type %} active{% endif %}' id='{{typeform.Meta.model.cname}}'>
+      {% for seg_name in ordered_names %}
+      <div class='tab-pane{% if seg_name == seg_type %} active{% endif %}' id='{{ seg_name }}'>
         <form method="POST" action="">
           {% csrf_token %}
-          <input type='hidden' name='seg_type' value='{{typeform.Meta.model.cname}}'>
+          <input type='hidden' name='seg_type' value='{{ seg_name }}'>
           <ul class="list-inline">
             <input class="btn btn-primary" type="submit">
             {{ form.as_ul }}
-            {{ typeform.as_ul }}
+            {% with forms|access:seg_name as seg_form %}
+              {{ seg_form.as_ul }}
+            {% endwith %}
           </ul>
         </form>
       </div>

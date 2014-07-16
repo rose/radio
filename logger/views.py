@@ -69,8 +69,14 @@ class EditEpisodeView(CreateView):
         ctx['episode'] = get_object_or_404(Episode, id = self.kwargs['pk'])
         #TODO sorting by time will be wrong for shows that cross midnight
         ctx['segment_list'] = Segment.objects.filter(episode = ctx['episode']).order_by('time')
-        ctx['forms'] = [ SongForm(), AdForm(), IdForm(), OtherForm() ]
+        ctx['forms'] = { 
+            'Song': SongForm(), 
+            'Advertisement': AdForm(), 
+            'StationID': IdForm(), 
+            'Other': OtherForm() 
+        }
         ctx['seg_type'] = kwargs.get('seg_type', 'Song')
+        ctx['ordered_names'] = ['Song', 'Advertisement', 'StationID', 'Other']
         return ctx
 
     def form_valid(self, form):
@@ -90,23 +96,19 @@ class EditEpisodeView(CreateView):
 
         if seg_type == 'Song':
             content_form = SongForm(**self.get_form_kwargs())
-            form_idx = 0
 
         elif seg_type == 'Advertisement':
             content_form = AdForm(**self.get_form_kwargs())
-            form_idx = 1
 
         elif seg_type == 'StationID':
             content_form = IdForm(**self.get_form_kwargs())
-            form_idx = 2
 
         elif seg_type == 'Other':
             content_form = OtherForm(**self.get_form_kwargs())
-            form_idx = 3
 
         if not content_form.is_valid() or not seg_form.is_valid():
             ctx['form'] = seg_form
-            ctx['forms'][form_idx] = content_form
+            ctx['forms'][seg_type] = content_form
             return self.render_to_response(ctx)
 
         created_sub = content_form.save() #TODO Check for song in db
