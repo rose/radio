@@ -37,8 +37,16 @@ class Show(Model):
         return "Show:  %s %s" % (self.title, self.dj)
 
 
+class Stat(Model):
+    length = DurationField()
+    canadian = FloatField()
+    local = FloatField()
+    spoken = FloatField()
+
+
 class Episode(Model):
     show = ForeignKey(Show)
+    stat = ForeignKey(Stat)
     air_date = DateField()
     air_time = TimeField()
 
@@ -139,4 +147,5 @@ class Segment(Model):
 
     def __str__(self):
         return "Segment: %s %s [%s]" % (self.seg_content, self.episode.show.title, str(self.time)[:8])
+
 

@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
-from logger.models import Show, Episode, Segment, Song, Advertisement, StationID, Other
+from logger.models import Show, Stat, Episode, Segment, Song, Advertisement, StationID, Other
 
 
 class ListShowView(ListView):
@@ -32,6 +32,9 @@ class EditShowView(CreateView):
 
     def form_valid(self, form):
         form.instance.show_id = self.kwargs['pk']
+        stat = Stat(length = 0, canadian = 0, local = 0, spoken = 0)
+        stat.save()
+        form.instance.stat_id = stat.id
         return super(EditShowView, self).form_valid(form)
 
     def get_success_url(self):
