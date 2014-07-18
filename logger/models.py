@@ -43,6 +43,9 @@ class Stat(Model):
     local = FloatField()
     spoken = FloatField()
 
+    def __str__(self):
+        return "Stat:  %s %02d %02d %02d" % (str(self.length), self.canadian, self.local, self.spoken)
+
 
 class Episode(Model):
     show = ForeignKey(Show)
