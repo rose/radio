@@ -1,0 +1,28 @@
+[
+{
+  "pk": 1,
+  "fields": {
+    "first_name": "Super",
+    "phone": "",
+    "last_name": "Freak"
+  },
+  "model": "logger.dj"
+},
+{
+  "pk": 1,
+  "fields": {
+    "origin_code": 1, "canadian": true, "description": "Crazyness",
+    "title": "Crazy Town Show", "dj": 1
+  }, 
+  "model": "logger.show"
+},
+{
+  "pk": 1,
+  "fields": {
+    "air_date": "2014-12-24",
+    "show": 1,
+    "air_time": "01:00:00"
+  },
+  "model": "logger.episode"
+} 
+]
