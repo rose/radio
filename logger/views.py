@@ -1,11 +1,13 @@
 import sys
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, CreateView, View
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect
+from ajax_select import make_ajax_field
+from ajax_select.fields import AutoCompleteSelectField
 from logger.models import Show, Episode, Segment, Song, Advertisement, StationID, Other
 
 
@@ -42,6 +44,9 @@ class SegmentForm(ModelForm):
     class Meta:
         model = Segment
         fields = ['time',]
+        
+class AutoForm(Form):
+    autocomp = AutoCompleteSelectField('songs', help_text=None)
 
 class SongForm(ModelForm):
     class Meta:
@@ -70,13 +75,14 @@ class EditEpisodeView(CreateView):
         #TODO sorting by time will be wrong for shows that cross midnight
         ctx['segment_list'] = Segment.objects.filter(episode = ctx['episode']).order_by('time')
         ctx['forms'] = { 
+            'Auto': AutoForm(),
             'Song': SongForm(), 
             'Advertisement': AdForm(), 
             'StationID': IdForm(), 
             'Other': OtherForm() 
         }
         ctx['seg_type'] = kwargs.get('seg_type', 'Song')
-        ctx['ordered_names'] = ['Song', 'Advertisement', 'StationID', 'Other']
+        ctx['ordered_names'] = ['Auto', 'Song', 'Advertisement', 'StationID', 'Other']
         return ctx
 
     def form_valid(self, form):
@@ -93,7 +99,9 @@ class EditEpisodeView(CreateView):
         ctx = self.get_context_data(pk=episode_pk, seg_type=seg_type)
 
         seg_form = SegmentForm( {'time': time} )
-        if seg_type == 'Song':
+        if seg_type == 'Auto':
+            content_form = OtherForm(**self.get_form_kwargs())
+        elif seg_type == 'Song':
             content_form = SongForm(**self.get_form_kwargs())
         elif seg_type == 'Advertisement':
             content_form = AdForm(**self.get_form_kwargs())
@@ -107,6 +115,8 @@ class EditEpisodeView(CreateView):
             ctx['forms'][seg_type] = content_form
             return self.render_to_response(ctx)
 
+        if seg_type == 'Auto':
+            created_sub = 
         created_sub = content_form.save() #TODO Check for song in db
 
         segargs = {
