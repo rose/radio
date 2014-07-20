@@ -19,9 +19,17 @@
 {
   "pk": 1,
   "fields": {
+    "song_count": 0
+  },
+  "model": "logger.stat"
+}, 
+{
+  "pk": 1,
+  "fields": {
     "air_date": "2014-12-24",
     "show": 1,
-    "air_time": "01:00:00"
+    "air_time": "01:00:00",
+    "stat": 1
   },
   "model": "logger.episode"
 } 
