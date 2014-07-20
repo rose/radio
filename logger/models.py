@@ -38,13 +38,20 @@ class Show(Model):
 
 
 class Stat(Model):
-    length = DurationField()
-    canadian = FloatField()
-    local = FloatField()
-    spoken = FloatField()
+    length = DurationField(default=0)
+    spoken = DurationField(default=0)
+    song_count = IntegerField(default=0)
+    song_canadian = IntegerField(default=0)
+    song_local = IntegerField(default=0)
 
     def __str__(self):
-        return "Stat:  %s %02d %02d %02d" % (str(self.length), self.canadian, self.local, self.spoken)
+        return "Stat:  (spoken: %s of %s), (songs (can,lcl,tot): %d %d %d)" % (
+            str(self.spoken),
+            str(self.length),
+            self.song_canadian,
+            self.song_local,
+            self.song_count
+        )
 
 
 class Episode(Model):
