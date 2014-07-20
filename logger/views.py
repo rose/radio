@@ -45,9 +45,10 @@ class SegmentForm(ModelForm):
         model = Segment
         fields = ['time',]
         
-class AutoForm(Form):
-    autocomp = AutoCompleteSelectField('songs', help_text=None)
+class AutoSongForm(Form):
+    song = AutoCompleteSelectField('songs', help_text=None)
 
+    
 class SongForm(ModelForm):
     class Meta:
         model = Song
@@ -75,14 +76,14 @@ class EditEpisodeView(CreateView):
         #TODO sorting by time will be wrong for shows that cross midnight
         ctx['segment_list'] = Segment.objects.filter(episode = ctx['episode']).order_by('time')
         ctx['forms'] = { 
-            'Auto': AutoForm(),
+            'AutoSong': AutoSongForm(),
             'Song': SongForm(), 
             'Advertisement': AdForm(), 
             'StationID': IdForm(), 
             'Other': OtherForm() 
         }
         ctx['seg_type'] = kwargs.get('seg_type', 'Song')
-        ctx['ordered_names'] = ['Auto', 'Song', 'Advertisement', 'StationID', 'Other']
+        ctx['ordered_names'] = ['Song', 'Advertisement', 'StationID', 'Other']
         return ctx
 
     def form_valid(self, form):
@@ -90,34 +91,45 @@ class EditEpisodeView(CreateView):
         return super(EditEpisodeView, self).form_valid(form)
 
 
+    def get_content_form(self,request):
+        self.auto = False
+        if self.seg_type == 'Song':
+            if request.POST['song_text'] == '' and request.POST['song'] == '':
+                content_form = SongForm(**self.get_form_kwargs())
+            else:
+                content_form = AutoSongForm(request.POST)
+                self.seg_type = 'AutoSong'
+                self.auto = True
+        elif self.seg_type == 'Advertisement':
+            content_form = AdForm(**self.get_form_kwargs())
+        elif self.seg_type == 'StationID':
+            content_form = IdForm(**self.get_form_kwargs())
+        elif self.seg_type == 'Other':
+            content_form = OtherForm(**self.get_form_kwargs())
+        return content_form
+
+
+
     def post(self, request, *args, **kwargs):
         self.object = None
-        seg_type = request.POST['seg_type']
+        self.seg_type = request.POST['seg_type']
         time = request.POST['time']
         episode_pk = self.kwargs['pk']
 
-        ctx = self.get_context_data(pk=episode_pk, seg_type=seg_type)
+        ctx = self.get_context_data(pk=episode_pk, seg_type=self.seg_type)
 
         seg_form = SegmentForm( {'time': time} )
-        if seg_type == 'Auto':
-            content_form = OtherForm(**self.get_form_kwargs())
-        elif seg_type == 'Song':
-            content_form = SongForm(**self.get_form_kwargs())
-        elif seg_type == 'Advertisement':
-            content_form = AdForm(**self.get_form_kwargs())
-        elif seg_type == 'StationID':
-            content_form = IdForm(**self.get_form_kwargs())
-        elif seg_type == 'Other':
-            content_form = OtherForm(**self.get_form_kwargs())
+        content_form = self.get_content_form(request)
 
         if not content_form.is_valid() or not seg_form.is_valid():
             ctx['form'] = seg_form
-            ctx['forms'][seg_type] = content_form
+            ctx['forms'][self.seg_type] = content_form
             return self.render_to_response(ctx)
 
-        if seg_type == 'Auto':
-            created_sub = 
-        created_sub = content_form.save() #TODO Check for song in db
+        if self.auto:
+            created_sub = content_form.cleaned_data.get("song") #TODO handle missing or incorrect data?
+        else:
+            created_sub = content_form.save() 
 
         segargs = {
             'episode': get_object_or_404(Episode, id=episode_pk),
