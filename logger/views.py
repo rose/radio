@@ -120,6 +120,8 @@ class EditEpisodeView(CreateView):
         }
         segment = Segment(**segargs)
 
+        segment.episode.update_stats(segment)
+
         self.object = segment.save()
         ctx['form'] = SegmentForm()
         return self.render_to_response(ctx)

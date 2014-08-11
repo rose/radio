@@ -67,6 +67,10 @@ class Episode(Model):
     air_date = DateField()
     air_time = TimeField()
 
+    def update_stats(self, new_segment):
+        self.stat.ad_count += 1
+        self.stat.save()
+
     def __str__(self):
         return "%s (%s %s)" % (self.show.title, self.air_date, self.air_time)
 
