@@ -40,17 +40,24 @@ class Show(Model):
 class Stat(Model):
     length = DurationField(default=0)
     spoken = DurationField(default=0)
-    song_count = IntegerField(default=0)
-    song_canadian = IntegerField(default=0)
+    ad_count = IntegerField(default=0)
+    song_cat3 = IntegerField(default=0)
+    song_cat2 = IntegerField(default=0)
+    song_cat3_canadian = IntegerField(default=0)
+    song_cat2_canadian = IntegerField(default=0)
     song_local = IntegerField(default=0)
 
     def __str__(self):
-        return "Stat:  (spoken: %s of %s), (songs (can,lcl,tot): %d %d %d)" % (
+        return "Stat:  (spoken: %s of %s), (local: %s of %s), (can2: %s of %s), (can3: %s of %s), (ads: %s)" % (
             str(self.spoken),
             str(self.length),
-            self.song_canadian,
             self.song_local,
-            self.song_count
+            self.song_cat3 + self.song_cat2,
+            self.song_cat2_canadian,
+            self.song_cat2,
+            self.song_cat3_canadian,
+            self.song_cat3,
+            self.ad_count
         )
 
 
