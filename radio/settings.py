@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'logger',
+    'ajax_select',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,6 +77,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+AJAX_LOOKUP_CHANNELS = {
+    'songs': ('logger.lookups', 'SongLookup'), 
+    'ads': ('logger.lookups', 'AdLookup'), 
+    'ids': ('logger.lookups', 'IdLookup'), 
+    'others': ('logger.lookups', 'OtherLookup'), 
+}
+
+AJAX_SELECT_BOOTSTRAP = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
