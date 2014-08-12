@@ -37,8 +37,26 @@ class Show(Model):
         return "Show:  %s %s" % (self.title, self.dj)
 
 
+class Stat(Model):
+    length = DurationField(default=0)
+    spoken = DurationField(default=0)
+    song_count = IntegerField(default=0)
+    song_canadian = IntegerField(default=0)
+    song_local = IntegerField(default=0)
+
+    def __str__(self):
+        return "Stat:  (spoken: %s of %s), (songs (can,lcl,tot): %d %d %d)" % (
+            str(self.spoken),
+            str(self.length),
+            self.song_canadian,
+            self.song_local,
+            self.song_count
+        )
+
+
 class Episode(Model):
     show = ForeignKey(Show)
+    stat = ForeignKey(Stat)
     air_date = DateField()
     air_time = TimeField()
 
@@ -139,4 +157,5 @@ class Segment(Model):
 
     def __str__(self):
         return "Segment: %s %s [%s]" % (self.seg_content, self.episode.show.title, str(self.time)[:8])
+
 

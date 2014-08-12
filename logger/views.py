@@ -8,7 +8,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from ajax_select import make_ajax_field
 from ajax_select.fields import AutoCompleteSelectField
-from logger.models import Show, Episode, Segment, Song, Advertisement, StationID, Other
 
 
 class ListShowView(ListView):
@@ -34,6 +33,9 @@ class EditShowView(CreateView):
 
     def form_valid(self, form):
         form.instance.show_id = self.kwargs['pk']
+        stat = Stat(length = 0, canadian = 0, local = 0, spoken = 0)
+        stat.save()
+        form.instance.stat_id = stat.id
         return super(EditShowView, self).form_valid(form)
 
     def get_success_url(self):
