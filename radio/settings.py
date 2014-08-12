@@ -79,6 +79,9 @@ USE_TZ = True
 
 AJAX_LOOKUP_CHANNELS = {
     'songs': ('logger.lookups', 'SongLookup'), 
+    'ads': ('logger.lookups', 'AdLookup'), 
+    'ids': ('logger.lookups', 'IdLookup'), 
+    'others': ('logger.lookups', 'OtherLookup'), 
 }
 
 AJAX_SELECT_BOOTSTRAP = False

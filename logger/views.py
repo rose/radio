@@ -5,7 +5,7 @@ from django.forms import ModelForm, Form
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from ajax_select import make_ajax_field
 from ajax_select.fields import AutoCompleteSelectField
 from logger.models import Show, Episode, Segment, Song, Advertisement, StationID, Other
@@ -46,18 +46,26 @@ class SegmentForm(ModelForm):
         fields = ['time',]
         
 class AutoSongForm(Form):
-    song = AutoCompleteSelectField('songs', help_text=None)
+    Song = AutoCompleteSelectField('songs', help_text=None)
 
+class AutoAdvertisementForm(Form):
+    Advertisement = AutoCompleteSelectField('ads', help_text=None)
+
+class AutoStationIDForm(Form):
+    StationID = AutoCompleteSelectField('ids', help_text=None)
+
+class AutoOtherForm(Form):
+    Other = AutoCompleteSelectField('others', help_text=None)
     
 class SongForm(ModelForm):
     class Meta:
         model = Song
 
-class AdForm(ModelForm):
+class AdvertisementForm(ModelForm):
     class Meta:
         model = Advertisement
 
-class IdForm(ModelForm):
+class StationIDForm(ModelForm):
     class Meta:
         model = StationID
 
@@ -77,10 +85,13 @@ class EditEpisodeView(CreateView):
         ctx['segment_list'] = Segment.objects.filter(episode = ctx['episode']).order_by('time')
         ctx['forms'] = { 
             'AutoSong': AutoSongForm(),
+            'AutoAdvertisement': AutoAdvertisementForm(), 
+            'AutoStationID': AutoStationIDForm(), 
+            'AutoOther': AutoOtherForm(), 
             'Song': SongForm(), 
-            'Advertisement': AdForm(), 
-            'StationID': IdForm(), 
-            'Other': OtherForm() 
+            'Advertisement': AdvertisementForm(), 
+            'StationID': StationIDForm(), 
+            'Other': OtherForm(), 
         }
         ctx['seg_type'] = kwargs.get('seg_type', 'Song')
         ctx['ordered_names'] = ['Song', 'Advertisement', 'StationID', 'Other']
@@ -93,19 +104,21 @@ class EditEpisodeView(CreateView):
 
     def get_content_form(self,request):
         self.auto = False
-        if self.seg_type == 'Song':
-            if request.POST['song_text'] == '' and request.POST['song'] == '':
-                content_form = SongForm(**self.get_form_kwargs())
-            else:
-                content_form = AutoSongForm(request.POST)
-                self.seg_type = 'AutoSong'
-                self.auto = True
-        elif self.seg_type == 'Advertisement':
-            content_form = AdForm(**self.get_form_kwargs())
-        elif self.seg_type == 'StationID':
-            content_form = IdForm(**self.get_form_kwargs())
-        elif self.seg_type == 'Other':
-            content_form = OtherForm(**self.get_form_kwargs())
+        if self.seg_type not in ['Song', 'Advertisement', 'StationID', 'Other']:
+            return HttpResponseNotFound(
+                "<h1>Can't add a " + self.seg_type + 
+                ' to the database because there is no such thing.</h1>'
+                )
+        segtext = self.seg_type + '_text'
+        if request.POST[segtext] == '' and request.POST[self.seg_type] == '': #Creating a new sub-segment
+            self.form_type = self.seg_type
+            formcons = globals()[self.seg_type + 'Form']
+            content_form = formcons(**self.get_form_kwargs())
+        else: #Using an existing segment
+            self.form_type = 'Auto' + self.seg_type 
+            self.auto = True
+            formcons = globals()[self.form_type + 'Form']
+            content_form = formcons(request.POST)
         return content_form
 
 
@@ -123,11 +136,11 @@ class EditEpisodeView(CreateView):
 
         if not content_form.is_valid() or not seg_form.is_valid():
             ctx['form'] = seg_form
-            ctx['forms'][self.seg_type] = content_form
+            ctx['forms'][self.form_type] = content_form
             return self.render_to_response(ctx)
 
         if self.auto:
-            created_sub = content_form.cleaned_data.get("song") #TODO handle missing or incorrect data?
+            created_sub = content_form.cleaned_data.get(self.seg_type) #TODO handle missing or incorrect data?
         else:
             created_sub = content_form.save() 
 

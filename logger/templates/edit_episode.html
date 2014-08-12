@@ -32,11 +32,11 @@
           <ul class="list-inline">
             <input class="btn btn-primary" type="submit">
             {{ form.as_ul }}
-            {% if seg_name == 'Song' %}
-              {% with forms|access:'AutoSong' as auto_form %}
+            {% with 'Auto'|add:seg_name as auto_seg_name %}
+              {% with forms|access:auto_seg_name as auto_form %}
                 {{ auto_form.as_ul }}
               {% endwith %}
-            {% endif %}
+            {% endwith %}
             {% with forms|access:seg_name as seg_form %}
               {{ seg_form.as_ul }}
             {% endwith %}
