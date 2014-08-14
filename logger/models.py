@@ -68,8 +68,13 @@ class Episode(Model):
     air_time = TimeField()
 
     def update_stats(self, new_segment):
-        self.stat.ad_count += 1
-        self.stat.save()
+        cls = new_segment.seg_content.__class__.__name__
+        stat = self.stat
+        if cls == "Advertisement":
+            stat.ad_count += 1
+        elif cls == "Song":
+            stat.song_cat3 += 1
+        stat.save()
 
     def __str__(self):
         return "%s (%s %s)" % (self.show.title, self.air_date, self.air_time)
@@ -82,6 +87,7 @@ class Episode(Model):
 class Advertisement(Model):
     advertiser = CharField(max_length=40)
     length = DurationField()
+    spoken = BooleanField(default=True)
 
     # required by section 8.1.c.v
     category = IntegerField(
