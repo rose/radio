@@ -112,16 +112,16 @@ class EditEpisodeView(CreateView):
                 "<h1>Can't add a " + self.seg_type + 
                 ' to the database because there is no such thing.</h1>'
                 )
-        segtext = self.seg_type + '_text'
-        if request.POST[segtext] == '' and request.POST[self.seg_type] == '': #Creating a new sub-segment
+        seg_text = self.seg_type + '_text'
+        if request.POST[seg_text] == '' and request.POST[self.seg_type] == '': #Creating a new sub-segment
             self.form_type = self.seg_type
-            formcons = globals()[self.seg_type + 'Form']
-            content_form = formcons(**self.get_form_kwargs())
+            ContentForm = globals()[self.seg_type + 'Form']
+            content_form = ContentForm(**self.get_form_kwargs())
         else: #Using an existing segment
             self.form_type = 'Auto' + self.seg_type 
             self.auto = True
-            formcons = globals()[self.form_type + 'Form']
-            content_form = formcons(request.POST)
+            ContentForm = globals()[self.form_type + 'Form']
+            content_form = ContentForm(request.POST)
         return content_form
 
 
