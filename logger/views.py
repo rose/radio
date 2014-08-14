@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from ajax_select import make_ajax_field
 from ajax_select.fields import AutoCompleteSelectField
+from logger.models import *
 
 
 class ListShowView(ListView):
