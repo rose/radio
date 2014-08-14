@@ -68,15 +68,25 @@ class Episode(Model):
     air_time = TimeField()
 
     def update_stats(self, new_segment):
-        cls = new_segment.seg_content.__class__.__name__
+        content = new_segment.seg_content
+        cls = content.__class__.__name__
         stat = self.stat
         if cls == "Advertisement":
             stat.ad_count += 1
         elif cls == "Song":
-            stat.song_cat3 += 1
+            if content.origin == "Lcl":
+                stat.song_local += 1
+            if content.category_3:
+                stat.song_cat3 += 1
+                if content.origin != "Int":
+                    stat.song_cat3_canadian += 1
+            else:
+                stat.song_cat2 += 1
+                if content.origin != "Int":
+                    stat.song_cat2_canadian += 1
         # TODO this is very basic!
         # does not account for deletions or segments that are not played fully or many other things
-        stat.length += new_segment.seg_content.length
+        stat.length += content.length
         stat.save()
 
     def __str__(self):
