@@ -143,7 +143,7 @@ class EditEpisodeView(CreateView):
             return self.render_to_response(ctx)
 
         if self.auto:
-            created_sub = content_form.cleaned_data.get(self.seg_type) #TODO handle missing or incorrect data?
+            created_sub = content_form.cleaned_data.get(self.seg_type) 
         else:
             created_sub = content_form.save() 
 
