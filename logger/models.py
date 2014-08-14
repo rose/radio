@@ -71,9 +71,9 @@ class Episode(Model):
         content = new_segment.seg_content
         cls = content.__class__.__name__
         stat = self.stat
-        if cls == "Advertisement":
-            stat.ad_count += 1
-        elif cls == "Song":
+
+        # TODO these should be methods on the content classes, duhdoi
+        if cls == "Song":
             if content.origin == "Lcl":
                 stat.song_local += 1
             if content.category_3:
@@ -84,6 +84,13 @@ class Episode(Model):
                 stat.song_cat2 += 1
                 if content.origin != "Int":
                     stat.song_cat2_canadian += 1
+
+        else: # cls == "StationID" || "Other" || "Advertisement"
+            if cls == "Advertisement":
+                stat.ad_count += 1
+            if content.spoken:
+                stat.spoken += content.length
+
         # TODO this is very basic!
         # does not account for deletions or segments that are not played fully or many other things
         stat.length += content.length
