@@ -74,6 +74,9 @@ class Episode(Model):
             stat.ad_count += 1
         elif cls == "Song":
             stat.song_cat3 += 1
+        # TODO this is very basic!
+        # does not account for deletions or segments that are not played fully or many other things
+        stat.length += new_segment.seg_content.length
         stat.save()
 
     def __str__(self):
