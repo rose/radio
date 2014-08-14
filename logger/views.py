@@ -34,7 +34,7 @@ class EditShowView(CreateView):
 
     def form_valid(self, form):
         form.instance.show_id = self.kwargs['pk']
-        stat = Stat(length = 0, canadian = 0, local = 0, spoken = 0)
+        stat = Stat()
         stat.save()
         form.instance.stat_id = stat.id
         return super(EditShowView, self).form_valid(form)
