@@ -40,17 +40,24 @@ class Show(Model):
 class Stat(Model):
     length = DurationField(default=0)
     spoken = DurationField(default=0)
-    song_count = IntegerField(default=0)
-    song_canadian = IntegerField(default=0)
+    ad_count = IntegerField(default=0)
+    song_cat3 = IntegerField(default=0)
+    song_cat2 = IntegerField(default=0)
+    song_cat3_canadian = IntegerField(default=0)
+    song_cat2_canadian = IntegerField(default=0)
     song_local = IntegerField(default=0)
 
     def __str__(self):
-        return "Stat:  (spoken: %s of %s), (songs (can,lcl,tot): %d %d %d)" % (
+        return "Stat:  (spoken: %s of %s), (local: %s of %s), (can2: %s of %s), (can3: %s of %s), (ads: %s)" % (
             str(self.spoken),
             str(self.length),
-            self.song_canadian,
             self.song_local,
-            self.song_count
+            self.song_cat3 + self.song_cat2,
+            self.song_cat2_canadian,
+            self.song_cat2,
+            self.song_cat3_canadian,
+            self.song_cat3,
+            self.ad_count
         )
 
 
@@ -59,6 +66,35 @@ class Episode(Model):
     stat = ForeignKey(Stat)
     air_date = DateField()
     air_time = TimeField()
+
+    def update_stats(self, new_segment):
+        content = new_segment.seg_content
+        cls = content.__class__.__name__
+        stat = self.stat
+
+        # TODO these should be methods on the content classes, duhdoi
+        if cls == "Song":
+            if content.origin == "Lcl":
+                stat.song_local += 1
+            if content.category_3:
+                stat.song_cat3 += 1
+                if content.origin != "Int":
+                    stat.song_cat3_canadian += 1
+            else:
+                stat.song_cat2 += 1
+                if content.origin != "Int":
+                    stat.song_cat2_canadian += 1
+
+        else: # cls == "StationID" || "Other" || "Advertisement"
+            if cls == "Advertisement":
+                stat.ad_count += 1
+            if content.spoken:
+                stat.spoken += content.length
+
+        # TODO this is very basic!
+        # does not account for deletions or segments that are not played fully or many other things
+        stat.length += content.length
+        stat.save()
 
     def __str__(self):
         return "%s (%s %s)" % (self.show.title, self.air_date, self.air_time)
@@ -71,6 +107,7 @@ class Episode(Model):
 class Advertisement(Model):
     advertiser = CharField(max_length=40)
     length = DurationField()
+    spoken = BooleanField(default=True)
 
     # required by section 8.1.c.v
     category = IntegerField(

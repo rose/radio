@@ -18,9 +18,7 @@
 },
 {
   "pk": 1,
-  "fields": {
-    "song_count": 0
-  },
+  "fields": { },
   "model": "logger.stat"
 }, 
 {

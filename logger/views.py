@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from ajax_select import make_ajax_field
 from ajax_select.fields import AutoCompleteSelectField
+from logger.models import *
 
 
 class ListShowView(ListView):
@@ -33,7 +34,7 @@ class EditShowView(CreateView):
 
     def form_valid(self, form):
         form.instance.show_id = self.kwargs['pk']
-        stat = Stat(length = 0, canadian = 0, local = 0, spoken = 0)
+        stat = Stat()
         stat.save()
         form.instance.stat_id = stat.id
         return super(EditShowView, self).form_valid(form)
@@ -111,16 +112,16 @@ class EditEpisodeView(CreateView):
                 "<h1>Can't add a " + self.seg_type + 
                 ' to the database because there is no such thing.</h1>'
                 )
-        segtext = self.seg_type + '_text'
-        if request.POST[segtext] == '' and request.POST[self.seg_type] == '': #Creating a new sub-segment
+        seg_text = self.seg_type + '_text'
+        if request.POST[seg_text] == '' and request.POST[self.seg_type] == '': #Creating a new sub-segment
             self.form_type = self.seg_type
-            formcons = globals()[self.seg_type + 'Form']
-            content_form = formcons(**self.get_form_kwargs())
+            ContentForm = globals()[self.seg_type + 'Form']
+            content_form = ContentForm(**self.get_form_kwargs())
         else: #Using an existing segment
             self.form_type = 'Auto' + self.seg_type 
             self.auto = True
-            formcons = globals()[self.form_type + 'Form']
-            content_form = formcons(request.POST)
+            ContentForm = globals()[self.form_type + 'Form']
+            content_form = ContentForm(request.POST)
         return content_form
 
 
@@ -142,7 +143,7 @@ class EditEpisodeView(CreateView):
             return self.render_to_response(ctx)
 
         if self.auto:
-            created_sub = content_form.cleaned_data.get(self.seg_type) #TODO handle missing or incorrect data?
+            created_sub = content_form.cleaned_data.get(self.seg_type) 
         else:
             created_sub = content_form.save() 
 
@@ -153,6 +154,8 @@ class EditEpisodeView(CreateView):
             'seg_id': created_sub.pk
         }
         segment = Segment(**segargs)
+
+        segment.episode.update_stats(segment)
 
         self.object = segment.save()
         ctx['form'] = SegmentForm()
