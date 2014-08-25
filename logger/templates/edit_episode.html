@@ -32,15 +32,36 @@
           <ul class="list-inline">
             <input class="btn btn-primary" type="submit">
             {{ form.as_ul }}
-            {% with 'Auto'|add:seg_name as auto_seg_name %}
-              {% with forms|access:auto_seg_name as auto_form %}
-                {{ auto_form.as_ul }}
-              {% endwith %}
-            {% endwith %}
-            {% with forms|access:seg_name as seg_form %}
-              {{ seg_form.as_ul }}
-            {% endwith %}
+            <li>
+            <ul class='nav nav-pills' id='X{{ seg_name }}'>
+              <li id='{{ seg_name }}Status'>Using existing
+              <li class="active"> 
+              <a href="#Auto{{ seg_name }}" data-toggle='tab' style='display:none'
+                onClick='$("#X{{ seg_name }} a:first").hide();$("#X{{ seg_name }} a:last").show();
+                $("#{{ seg_name }}Status").text("Using Existing {{ seg_name }}")'>
+                Use Existing</a>
+              <li> <a href="#New{{ seg_name }}" data-toggle='tab' onClick='$("#X{{ seg_name }} a:last").hide();$("#X{{ seg_name }} a:first").show();
+                $("#{{ seg_name }}Status").text("Creating New {{ seg_name }}")'>Create New</a>
+            </ul>
           </ul>
+          <div class='tab-content'>
+            <div class='tab-pane active' id='Auto{{seg_name}}'> <!-- TODO activate if autoform -->
+              <ul class="list-inline">
+                {% with 'Auto'|add:seg_name as auto_seg_name %}
+                {% with forms|access:auto_seg_name as auto_form %}
+                {{ auto_form.as_ul }}
+                {% endwith %}
+                {% endwith %}
+              </ul>
+            </div>
+            <div class='tab-pane' id='New{{ seg_name }}'>
+              <ul class="list-inline">
+                {% with forms|access:seg_name as seg_form %}
+                {{ seg_form.as_ul }}
+                {% endwith %}
+              </ul>
+            </div>
+          </div>
         </form>
       </div>
       {% endfor %}
