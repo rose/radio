@@ -8,7 +8,7 @@
     {% endblock %}
  
 {% block content %}
-<ul>
+<ul id='shows_list'>
   {% for show in show_list %}
   <li> <a href="show/{{show.id}}" >{{ show }} </a></li>
   {% endfor %}

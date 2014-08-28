@@ -7,6 +7,9 @@ from logger.models import Song, Advertisement, StationID, Other
 class SongLookup(LookupChannel):
     model = Song
 
+    def check_auth(self,request):
+        return True #TODO delete this once we can test user login
+
     def get_query(self,q,request):
         return Song.objects.filter(Q(title__icontains=q) | Q(artist__icontains=q) | Q(composer__icontains=q)).order_by('title')
         
@@ -24,6 +27,9 @@ class SongLookup(LookupChannel):
 
 class AdLookup(LookupChannel):
     model = Advertisement
+
+    def check_auth(self,request):
+        return True #TODO delete this once we can test user login
 
     def get_query(self,q,request):
         return Advertisement.objects.filter(Q(advertiser__icontains=q)).order_by('advertiser')
@@ -43,6 +49,9 @@ class AdLookup(LookupChannel):
 class IdLookup(LookupChannel):
     model = StationID
 
+    def check_auth(self,request):
+        return True #TODO delete this once we can test user login
+
     def get_query(self,q,request):
         return StationID.objects.filter(Q(length__gt=int(q))).order_by('length')
         
@@ -60,6 +69,9 @@ class IdLookup(LookupChannel):
 
 class OtherLookup(LookupChannel):
     model = Other
+
+    def check_auth(self,request):
+        return True #TODO delete this once we can test user login
 
     def get_query(self,q,request):
         return Other.objects.filter(Q(description__icontains=q)).order_by('description')
