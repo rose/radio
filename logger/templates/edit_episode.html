@@ -30,27 +30,28 @@
           {% csrf_token %}
           <input type='hidden' name='seg_type' value='{{ seg_name }}'>
           <ul class="list-inline">
-            <input class="btn btn-primary" type="submit" id="play_{{ seg_name }}" value="Play {{ seg_name }}">
             {{ form.as_ul }}
-            <li>
-            <ul class='nav nav-pills' id='X{{ seg_name }}'>
-              <li id='{{ seg_name }}Status'>Play Existing {{ seg_name }}
-              <li class="active"> 
+          </ul>
+          <ul class='nav nav-pills' id='X{{ seg_name }}'>
+            <li id='{{ seg_name }}Status'>Play Existing {{ seg_name }}</li>
+            <li class="active"> 
               <a href="#Auto{{ seg_name }}" data-toggle='tab'
-                style='display:none'
-                onClick='$("#X{{ seg_name }} a:first").hide();
-                $("#X{{ seg_name }} a:last").show();
-                $("#{{ seg_name }}Status")
-                .text("Play Existing {{ seg_name }}")'
-               >
-                Use Existing</a>
-              <li> <a href="#New{{ seg_name }}" data-toggle='tab'
-                onClick='$("#X{{ seg_name }} a:last")
-                .hide();$("#X{{ seg_name }} a:first").show();
-                $("#{{ seg_name }}Status")
-                .text("Play New {{ seg_name }}")' id='new_{{ seg_name }}'>
+                 style='display:none'
+                 onClick='$("#X{{ seg_name }} a:first").hide();
+                 $("#X{{ seg_name }} a:last").show();
+                 $("#{{ seg_name }}Status")
+                 .text("Play Existing {{ seg_name }}")'
+                 >
+                 Use Existing</a>
+            </li>
+            <li> 
+              <a href="#New{{ seg_name }}" data-toggle='tab'
+                 onClick='$("#X{{ seg_name }} a:last").hide();
+                 $("#X{{ seg_name }} a:first").show();
+                 $("#{{ seg_name }}Status")
+                 .text("Play New {{ seg_name }}")' id='new_{{ seg_name }}'>
                 Create New</a>
-            </ul>
+            </li>
           </ul>
           <div class='tab-content'>
             <div class='tab-pane active' id='Auto{{seg_name}}'> <!-- TODO activate if autoform -->
@@ -70,6 +71,7 @@
               </ul>
             </div>
           </div>
+            <input class="btn btn-primary" type="submit" id="play_{{ seg_name }}" value="Play {{ seg_name }}">
         </form>
       </div>
       {% endfor %}
