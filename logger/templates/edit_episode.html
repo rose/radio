@@ -32,25 +32,15 @@
           <ul class="list-inline">
             {{ form.as_ul }}
           </ul>
-          <ul class='nav nav-pills' id='X{{ seg_name }}'>
-            <li id='{{ seg_name }}Status'>Play Existing {{ seg_name }}</li>
+          <ul class='nav nav-pills' id='Lookup{{ seg_name }}'>
             <li class="active"> 
-              <a href="#Auto{{ seg_name }}" data-toggle='tab'
-                 style='display:none'
-                 onClick='$("#X{{ seg_name }} a:first").hide();
-                 $("#X{{ seg_name }} a:last").show();
-                 $("#{{ seg_name }}Status")
-                 .text("Play Existing {{ seg_name }}")'
-                 >
-                 Use Existing</a>
+              <a href="#Auto{{ seg_name }}" data-toggle='tab'>
+                Look Up Existing {{ seg_name }}</a>
             </li>
             <li> 
               <a href="#New{{ seg_name }}" data-toggle='tab'
-                 onClick='$("#X{{ seg_name }} a:last").hide();
-                 $("#X{{ seg_name }} a:first").show();
-                 $("#{{ seg_name }}Status")
-                 .text("Play New {{ seg_name }}")' id='new_{{ seg_name }}'>
-                Create New</a>
+                id='new_{{ seg_name }}'>
+                Create New {{ seg_name }}</a>
             </li>
           </ul>
           <div class='tab-content'>
