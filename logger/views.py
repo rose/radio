@@ -1,26 +1,19 @@
 import sys
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, CreateView, View
-from django.forms import ModelForm, Form
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from ajax_select import make_ajax_field
 from ajax_select.fields import AutoCompleteSelectField
+from logger.forms import *
 from logger.models import *
 
 
 class ListShowView(ListView):
     model = Show
     template_name = "show_list.html"
-
-
-class EpisodeForm(ModelForm):
-    class Meta:
-        model = Episode
-        fields = ['air_date', 'air_time']
-
 
 class EditShowView(CreateView):
     template_name = "edit_show.html"
@@ -41,40 +34,6 @@ class EditShowView(CreateView):
 
     def get_success_url(self):
         return reverse('edit-show', kwargs={'pk': self.object.show.pk})
-
-
-class SegmentForm(ModelForm):
-    class Meta:
-        model = Segment
-        fields = ['time',]
-        
-class AutoSongForm(Form):
-    Song = AutoCompleteSelectField('songs', help_text=None)
-
-class AutoAdvertisementForm(Form):
-    Advertisement = AutoCompleteSelectField('ads', help_text=None)
-
-class AutoStationIDForm(Form):
-    StationID = AutoCompleteSelectField('ids', help_text=None)
-
-class AutoOtherForm(Form):
-    Other = AutoCompleteSelectField('others', help_text=None)
-    
-class SongForm(ModelForm):
-    class Meta:
-        model = Song
-
-class AdvertisementForm(ModelForm):
-    class Meta:
-        model = Advertisement
-
-class StationIDForm(ModelForm):
-    class Meta:
-        model = StationID
-
-class OtherForm(ModelForm):
-    class Meta:
-        model = Other
 
 
 class EditEpisodeView(CreateView):
