@@ -5,8 +5,6 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, HttpResponseNotFound
-from ajax_select import make_ajax_field
-from ajax_select.fields import AutoCompleteSelectField
 from logger.forms import *
 from logger.models import *
 

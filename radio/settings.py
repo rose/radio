@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'logger',
     'ajax_select',
+    'durationfield',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -85,6 +86,9 @@ AJAX_LOOKUP_CHANNELS = {
 }
 
 AJAX_SELECT_BOOTSTRAP = False
+
+DURATIONFIELD_ASSUME_MMSS = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
