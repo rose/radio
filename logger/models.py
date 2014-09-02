@@ -192,6 +192,10 @@ class Segment(Model):
     seg_id = PositiveIntegerField()
     seg_content = GenericForeignKey('seg_type', 'seg_id')
 
+    def get_end(self):
+        dt = datetime.datetime.combine(datetime.date.today(), self.time) + self.seg_content.length
+        return dt.strftime("%H:%M")
+
     def __str__(self):
         return "Segment: %s %s [%s]" % (self.seg_content, self.episode.show.title, str(self.time)[:8])
 

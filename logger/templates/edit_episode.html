@@ -31,6 +31,13 @@
           <input type='hidden' name='seg_type' value='{{ seg_name }}'>
           <ul class="list-inline">
             {{ form.as_ul }}
+            <li><small 
+              onClick='enter_now($("#{{ seg_name }}"))'>&lt;- Now
+            </small>
+            <small 
+              onClick='enter_last($("#{{ seg_name }}"),
+              "{{ last_seg_time }}")'>&lt;- Last
+            </small>
           </ul>
           <ul class='nav nav-pills' id='Lookup{{ seg_name }}'>
             <li class="active"> 
@@ -67,7 +74,7 @@
       {% endfor %}
     </div>
     <ul id='segment_list'>
-      {% for segment in segment_list reversed %}
+      {% for segment in segment_list %}
       <li> {{ segment }} </li>
       {% endfor %}
     </ul>
