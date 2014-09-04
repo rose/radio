@@ -43,8 +43,11 @@ class EditEpisodeView(CreateView):
         ctx['episode'] = get_object_or_404(Episode, id = self.kwargs['pk'])
         #TODO sorting by time will be wrong for shows that cross midnight
         ctx['segment_list'] = Segment.objects.filter(episode = ctx['episode']).order_by('-time')
-        #TODO before there are any segments we want the start time of the episode here
-        ctx['last_seg_time'] = ctx['segment_list'][0].get_end()
+        if ctx['segment_list']:
+            ctx['last_seg_time'] = ctx['segment_list'][0].get_end()
+        else:
+        #If there aren't any segments, use the start time of the episode
+            ctx['last_seg_time'] = ctx['episode'].start_string()
         ctx['forms'] = { 
             'AutoSong': AutoSongForm(),
             'AutoAdvertisement': AutoAdvertisementForm(), 

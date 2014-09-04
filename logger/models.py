@@ -95,6 +95,9 @@ class Episode(Model):
         # does not account for deletions or segments that are not played fully or many other things
         stat.length += content.length
         stat.save()
+    
+    def start_string(self):
+        return self.air_time.strftime("%H:%M") 
 
     def __str__(self):
         return "%s (%s %s)" % (self.show.title, self.air_date, self.air_time)
