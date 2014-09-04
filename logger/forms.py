@@ -14,8 +14,9 @@ class SegmentForm(ModelForm):
         model = Segment
         fields = ['time',]
         widgets = {
-            'time': TextInput(
-              attrs={'size':'8', 'placeholder': 'Start'}),
+            'time': TextInput(attrs={
+                'size':'8', 'placeholder': 'Start', 
+                'title': 'Start Time (HH:MM 24hr format)'}),
         }
         labels = {
             'time': '',
@@ -38,14 +39,15 @@ class SongForm(ModelForm):
     class Meta:
         model = Song
         widgets = {
-            'title': TextInput(
-              attrs={'size': '16', 'placeholder' : 'Title'}),    
-            'artist': TextInput(
-              attrs={'size': '16', 'placeholder': 'Artist'}),
-            'composer': TextInput(
-              attrs={'size': '16', 'placeholder': 'Composer'}),
-            'length': TextInput(
-              attrs={'size': '8', 'placeholder': 'Length'}),
+            'title': TextInput(attrs={
+                'size': '16', 'placeholder' : 'Title', 'title' : 'Title'}), 
+            'artist': TextInput(attrs={
+                'size': '16', 'placeholder': 'Artist', 'title' : 'Artist'}),
+            'composer': TextInput(attrs={
+                'size': '16', 'placeholder': 'Composer', 
+                'title' : 'Composer'}),
+            'length': TextInput(attrs={
+                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
         }
         labels = {
             'title': '', 'artist': '', 'composer': '', 'length': '',
@@ -54,13 +56,42 @@ class SongForm(ModelForm):
 class AdvertisementForm(ModelForm):
     class Meta:
         model = Advertisement
+        widgets = {
+            'advertiser' : TextInput(attrs={
+                'size': '16', 'placeholder': 'Advertiser',
+                'title': 'Advertiser'}),
+            'length': TextInput(attrs={
+                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
+        }
+        labels = {
+            'advertiser': '', 'length': '',
+        }
 
 class StationIDForm(ModelForm):
     class Meta:
         model = StationID
+        widgets = {
+            'length': TextInput(attrs={
+                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
+        }
+        labels = {
+            'length': '',
+        }
+
 
 class OtherForm(ModelForm):
     class Meta:
         model = Other
+        widgets = {
+            'description' : TextInput(attrs={
+                'size': '16', 'placeholder': 'Description',
+                'title': 'Description'}),
+            'length': TextInput(attrs={
+                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
+        }
+        labels = {
+            'description': '', 'length': '',
+        }
+
 
 
