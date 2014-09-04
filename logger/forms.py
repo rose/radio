@@ -8,6 +8,15 @@ class EpisodeForm(ModelForm):
     class Meta:
         model = Episode
         fields = ['air_date', 'air_time']
+        widgets = {
+            'air_date': TextInput(attrs={
+                'size': '16', 'placeholder': 'Air Date MM/DD/YY',
+                'title': 'Air Date MM/DD/YY'}),
+            'air_time': TextInput(attrs={
+                'size': '16', 'placeholder': 'Air Time (HH:MM)',
+                'title': 'Air Time (HH:MM 24hr format)'})
+        }
+        labels = {'air_date': '', 'air_time': ''}
 
 class SegmentForm(ModelForm):
     class Meta:
