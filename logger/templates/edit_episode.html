@@ -63,7 +63,7 @@
             <div class='tab-pane' id='New{{ seg_name }}'>
               <ul class="list-inline">
                 {% with forms|access:seg_name as seg_form %}
-                {{ seg_form.as_ul }}
+                {% include seg_name|add:"Form.html" %}
                 {% endwith %}
               </ul>
             </div>
