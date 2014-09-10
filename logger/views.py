@@ -2,7 +2,6 @@ import sys
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, CreateView, View
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from logger.forms import *
