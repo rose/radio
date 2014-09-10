@@ -1,4 +1,4 @@
-from django.forms import ModelForm, Form, TextInput
+from django.forms import ModelForm, Form, TextInput, RadioSelect
 from logger.models import *
 from ajax_select import make_ajax_field
 from ajax_select.fields import AutoCompleteSelectField
@@ -70,7 +70,9 @@ class AdvertisementForm(ModelForm):
                 'size': '16', 'placeholder': 'Advertiser',
                 'title': 'Advertiser'}),
             'length': TextInput(attrs={
-                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
+                'size': '8', 'placeholder': 'Length', 
+                'title' : 'Length (MM:SS)'}),
+            'category': RadioSelect(),
         }
         labels = {
             'advertiser': '', 'length': '',
