@@ -8,7 +8,7 @@
   {% for cat in seg_form.category %}
   <label class='btn btn-primary 
     {% if "checked" in cat.tag|stringformat:"s" %} active{% endif %}'>
-    {{ cat.0|stringformat:"s" }} {{ seg_form.category.initial }} {{ cat.tag }} {{ cat.choice_label }}
+    {{ cat.tag }} {{ cat.choice_label }}
   </label>
   {% endfor %}
   </div>
