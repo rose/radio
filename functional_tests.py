@@ -46,12 +46,12 @@ class LogAShow(unittest.TestCase):
             sb.find_element_by_tag_name('h2').text)
 
         #Add Songs
-        find_link(sb, 'Create New').click()
+        find_id(sb, 'new_Song').click()
         find_id(sb, 'id_time').send_keys('1:42')
         find_id(sb, 'id_title').send_keys('Hobo\'s Lullaby')
         find_id(sb, 'id_artist').send_keys('David Rovics')
         find_id(sb, 'id_composer').send_keys('Brahms')
-        find_id(sb, 'id_length').send_keys('0:3:57')
+        find_id(sb, 'id_length').send_keys('3:57')
         find_id(sb, 'play_Song').click()
         items = find_tags(sb, 'li')
         self.assertTrue( 
