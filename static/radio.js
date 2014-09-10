@@ -1,8 +1,8 @@
 ;
-function enter_now(element) {
+function enter_now(parent_elem) {
   now = new Date();
-  element.find("#id_time").val(now.getHours()+":"+now.getMinutes());
+  parent_elem.find("#id_time").val(now.getHours()+":"+now.getMinutes());
 }
-function enter_last(element, time) {
-  element.find("#id_time").val(time);
+function enter_last(parent_elem, time) {
+  parent_elem.find("#id_time").val(time);
 }
