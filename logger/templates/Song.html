@@ -1,0 +1,7 @@
+{% load timedelta %}
+<div class='row'> 
+  <div class='col-md-2'><span class='glyphicon glyphicon-music'></span> {{ segment.time }} </div> 
+  <div class='col-md-4 song'> {{ segment.seg_content.title }}</div>
+  <div class='col-sm-2'>{% td_format segment.seg_content.length %}</div>
+</div>
+

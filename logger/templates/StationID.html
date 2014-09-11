@@ -1,0 +1,7 @@
+{% load timedelta %}
+<div class='row'> 
+  <div class='col-sm-2'>ID {{ segment.time }} </div> 
+  <div class='col-sm-4'>{% if segment.seg_content.spoken %}
+    Spoken {% else %}Musical{% endif %} Station ID</div>
+  <div class='col-sm-2'>{% td_format segment.seg_content.length %}</div>
+</div>
