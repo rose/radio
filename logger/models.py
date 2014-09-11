@@ -1,3 +1,5 @@
+from random import randint
+from datetime import datetime, date, timedelta
 from django.db.models import * # yeah, I know.  But we're using most of them.
 from durationfield.db.models.fields.duration import DurationField
 from django.contrib.contenttypes.models import ContentType
@@ -196,7 +198,11 @@ class Segment(Model):
     seg_content = GenericForeignKey('seg_type', 'seg_id')
 
     def get_end(self):
-        dt = datetime.datetime.combine(datetime.date.today(), self.time) + self.seg_content.length
+        #add 30 seconds because we're truncating
+        #and 0-30 seconds to round randomly
+        dt = (datetime.combine(date.today(), self.time)
+            + self.seg_content.length
+            + timedelta(seconds=30+randint(0,30)))
         return dt.strftime("%H:%M")
 
     def __str__(self):
