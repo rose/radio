@@ -112,14 +112,17 @@ class Episode(Model):
 class Advertisement(Model):
     advertiser = CharField(max_length=40)
     length = DurationField()
-    spoken = BooleanField(default=True)
+    spoken = BooleanField(
+            choices = ((True, 'S'), (False, 'M')),
+            default=True,
+        )
 
     # required by section 8.1.c.v
     category = IntegerField(
             choices = (
                 (51, "Announcement"),
                 (52, "Sponsor ID"),
-                (53, "Promotion with sponsor ID")
+                (53, "Promo")
             ),
             default=52
     )
@@ -140,12 +143,15 @@ class Song(Model):
     composer = CharField(max_length=40)
     length = DurationField()
 
-    category_3 = BooleanField(default=False)
+    category_3 = BooleanField(
+            default = False,
+            choices = ((True, '3'), (False, '2'))
+        )
     origin = CharField(
             max_length = 3,
             choices = (
                 ("Lcl", "Local"),
-                ("Can", "Non-local Canadian"),
+                ("Can", "Canadian"),
                 ("Int", "International")
             ), 
             default = "Int"
@@ -163,7 +169,11 @@ class Song(Model):
 
 # category 1 (if spoken) or 4 (if recorded musical)
 class StationID(Model):
-    spoken = BooleanField(default=True)
+    spoken = BooleanField(
+            choices = ((True, 'S'), (False, 'M')),
+            default=True,
+        )
+
     length = DurationField()
 
     def cname(self):
@@ -178,7 +188,12 @@ class StationID(Model):
 
 # category 1 (spoken) or 4 (prerecorded musical, eg show themes or contest promotions)
 class Other(Model):
-    spoken = BooleanField(default = True)
+    spoken = BooleanField(
+            choices = ((True, 'S'), (False, 'M')),
+            default=True,
+        )
+
+
     description = CharField(max_length=120)
     length = DurationField()
 
@@ -198,12 +213,9 @@ class Segment(Model):
     seg_content = GenericForeignKey('seg_type', 'seg_id')
 
     def get_end(self):
-        #add 30 seconds because we're truncating
-        #and 0-30 seconds to round randomly
         dt = (datetime.datetime.combine(date.today(), self.time)
-            + self.seg_content.length
-            + timedelta(seconds=30+randint(0,30)))
-        return dt.strftime("%H:%M")
+            + self.seg_content.length)
+        return dt.strftime("%H:%M:%S")
 
     def __str__(self):
         return "Segment: %s %s [%s]" % (self.seg_content, self.episode.show.title, str(self.time)[:8])
