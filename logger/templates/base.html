@@ -1,7 +1,9 @@
 {% load staticfiles %}
 <html>
   <head>
-    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+   <link href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+          rel="stylesheet" media="screen">
+   <link href="{% static 'radio.css' %}"
           rel="stylesheet" media="screen">
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.css" />
     <title>CHCR CRTC and SOCAN Logger - 
@@ -15,8 +17,10 @@
       <li class="active">Shows</li>
     </ul>
     {% endblock %}
-    {% block content %}
-    {% endblock %}
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
     <!-- TODO check ajax_selects jQuery works with Bootstrap's JavaScript plugins) -->
     <script src="{% static 'bootstrap.js' %}"></script>
     <script src="{% static 'ajax_select.js' %}"></script>

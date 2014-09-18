@@ -29,46 +29,51 @@
         <form method="POST" action="">
           {% csrf_token %}
           <input type='hidden' name='seg_type' value='{{ seg_name }}'>
-          <ul class="list-inline">
-            {{ form.as_ul }}
-            <li><small 
-              onClick='enter_now($("#{{ seg_name }}"))'>&lt;- Now
-            </small>
-            <small 
-              onClick='enter_last($("#{{ seg_name }}"),
-              "{{ last_seg_time }}")'>&lt;- Last
-            </small>
-          </ul>
           <ul class='nav nav-pills' id='Lookup{{ seg_name }}'>
-            <li class="active"> 
+            <li{% if seg_auto %} class="active"{% endif %}> 
               <a href="#Auto{{ seg_name }}" data-toggle='tab'>
-                Look Up Existing {{ seg_name }}</a>
+                Look Up {{ seg_name }}</a>
             </li>
-            <li> 
+            <li{% if not seg_auto %} class="active"{% endif %}> 
               <a href="#New{{ seg_name }}" data-toggle='tab'
                 id='new_{{ seg_name }}'>
-                Create New {{ seg_name }}</a>
+                Create {{ seg_name }}</a>
             </li>
           </ul>
-          <div class='tab-content'>
-            <div class='tab-pane active' id='Auto{{seg_name}}'> <!-- TODO activate if autoform -->
-              <ul class="list-inline">
-                {% with 'Auto'|add:seg_name as auto_seg_name %}
-                {% with forms|access:auto_seg_name as auto_form %}
-                {{ auto_form.as_ul }}
-                {% endwith %}
-                {% endwith %}
-              </ul>
+          <div class='tab-content formrow'>
+            <div class='tab-pane{% if seg_auto %} active{% endif %}' id='Auto{{seg_name}}'> <!-- TODO activate if autoform -->
+              <div class="row">
+                <div class="col-sm-12">
+                  {% with 'Auto'|add:seg_name as auto_seg_name %}
+                  {% with forms|access:auto_seg_name as auto_form %}
+                  {{ auto_form|access:seg_name }}
+                  {% endwith %}
+                  {% endwith %}
+                </div>
+              </div>
             </div>
-            <div class='tab-pane' id='New{{ seg_name }}'>
-              <ul class="list-inline">
-                {% with forms|access:seg_name as seg_form %}
-                {% include seg_name|add:"Form.html" %}
-                {% endwith %}
-              </ul>
+            <div class='tab-pane{% if not seg_auto %} active{% endif %}' id='New{{ seg_name }}'>
+              {% with forms|access:seg_name as seg_form %}
+              {% include seg_name|add:"Form.html" %}
+              {% endwith %}
             </div>
           </div>
-            <input class="btn btn-primary" type="submit" id="play_{{ seg_name }}" value="Play {{ seg_name }}">
+          <div class="logrow">
+            <div class="row">
+              <div class="col-sm-3">{{ form.time }}<br>
+                <span class="btn-xs btn-primary" 
+                  onClick='enter_now($("#{{ seg_name }}"))'>Now
+                </span>&nbsp;
+                <span class="btn-xs btn-primary" 
+                  onClick='enter_last($("#{{ seg_name }}"),
+                  "{{ last_seg_time }}")'>Last
+                </span>
+              </div>
+              <div class="col-sm-3">
+                <input class="btn btn-primary" type="submit" id="play_{{ seg_name }}" value="Log {{ seg_name }}">
+              </div>
+            </div>
+          </div>
         </form>
       </div>
       {% endfor %}

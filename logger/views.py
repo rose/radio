@@ -58,6 +58,7 @@ class EditEpisodeView(CreateView):
             'Other': OtherForm(), 
         }
         ctx['seg_type'] = kwargs.get('seg_type', 'Song')
+        ctx['seg_auto'] = kwargs.get('seg_auto', True)
         ctx['ordered_names'] = ['Song', 'Advertisement', 'StationID', 'Other']
         return ctx
 
@@ -101,6 +102,7 @@ class EditEpisodeView(CreateView):
         if not content_form.is_valid() or not seg_form.is_valid():
             ctx['form'] = seg_form
             ctx['forms'][self.form_type] = content_form
+            ctx['seg_auto'] = self.auto
             return self.render_to_response(ctx)
 
         if self.auto:
@@ -119,7 +121,8 @@ class EditEpisodeView(CreateView):
         segment.episode.update_stats(segment)
 
         self.object = segment.save()
-        ctx = self.get_context_data(pk=episode_pk, seg_type=self.seg_type)
+        ctx = self.get_context_data(pk=episode_pk, seg_type=self.seg_type,
+                seg_auto=self.auto)
         ctx['form'] = SegmentForm()
         return self.render_to_response(ctx)
 

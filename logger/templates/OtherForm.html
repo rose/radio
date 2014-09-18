@@ -1,1 +1,16 @@
-                {{ seg_form.as_ul }}
+{% load staticfiles %}
+<div class="row">
+  <div class="col-sm-3">
+    {{ seg_form.spoken.errors }}
+    <div class='btn-group' data-toggle='buttons'>
+      {% for sp in seg_form.spoken %}
+      <label class='btn btn-sm btn-success 
+        {% if "checked" in sp.tag|stringformat:"s" %} active{% endif %}'>
+         {{ sp.tag }} <img class="btnicon" src="{% static sp.choice_label|add:'.svg' %}" title="{{ sp.choice_label }}">
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-sm-6">{{ seg_form.description }}</div>
+  <div class="col-sm-3">{{ seg_form.length }}</div>
+</div>

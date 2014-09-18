@@ -1,6 +1,6 @@
 {% load timedelta %}
 <div class='row'> 
-  <div class='col-sm-2'><span class='glyphicon glyphicon-cog'></span> {{ segment.time }} </div> 
-  <div class='col-sm-4'>{% if segment.seg_content.spoken %}Spoken {% else %}Musical{% endif %} {{ segment.seg_content.description }}</div>
-  <div class='col-sm-2'>{% td_format segment.seg_content.length %}</div>
+  <div class='col-sm-3'><span class='glyphicon glyphicon-cog'></span> {{ segment.time }} </div> 
+  <div class='col-sm-6'>{% if segment.seg_content.spoken %}Spoken {% else %}Musical{% endif %} {{ segment.seg_content.description }}</div>
+  <div class='col-sm-3'>{% td_format segment.seg_content.length %}</div>
 </div>

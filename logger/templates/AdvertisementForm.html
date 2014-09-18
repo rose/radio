@@ -1,15 +1,27 @@
-{% load dict_access %}
-<li>{{ seg_form.advertiser }}</li>
-<li>{{ seg_form.length }}</li>
-<li>{{ seg_form.spoken.label }} {{ seg_form.spoken }}</li>
-<li>
-  {{ seg_form.category.errors }}
-  <div class='btn-group' data-toggle='buttons'>
-  {% for cat in seg_form.category %}
-  <label class='btn btn-primary 
-    {% if "checked" in cat.tag|stringformat:"s" %} active{% endif %}'>
-    {{ cat.tag }} {{ cat.choice_label }}
-  </label>
-  {% endfor %}
+{% load staticfiles %}
+<div class="row">
+  <div class="col-sm-3">
+    {{ seg_form.spoken.errors }}
+    <div class='btn-group' data-toggle='buttons'>
+      {% for sp in seg_form.spoken %}
+      <label class='btn btn-xs btn-success 
+        {% if "checked" in sp.tag|stringformat:"s" %} active{% endif %}'>
+        {{ sp.tag }} <img class="btnicon" src="{% static sp.choice_label|add:'.svg' %}" title="{{ sp.choice_label }}">
+      </label>
+      {% endfor %}
+    </div>
   </div>
-</li>
+  <div class="col-sm-3">{{ seg_form.advertiser }}</div>
+  <div class="col-sm-3">
+    {{ seg_form.category.errors }}
+    <div class='btn-group' data-toggle='buttons'>
+      {% for cat in seg_form.category %}
+      <label class='btn btn-xs btn-success 
+        {% if "checked" in cat.tag|stringformat:"s" %} active{% endif %}'>
+        {{ cat.tag }} {{ cat.choice_label }}
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-sm-3">{{ seg_form.length }}</div>
+</div>

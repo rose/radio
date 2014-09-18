@@ -1,1 +1,38 @@
-                {{ seg_form.as_ul }}
+{% load staticfiles %}
+<div class='row'>
+  <div class='col-sm-3'></div>
+  <div class='col-sm-3'>{{ seg_form.title }}</div>
+  <div class='col-sm-3'>{{ seg_form.artist }}</div>
+  <div class='col-sm-3'>{{ seg_form.length }}</div>
+</div>
+<div class='row'>
+   <div class='col-sm-3'>
+    {{ seg_form.origin.errors }}
+    <div class='btn-group' data-toggle='buttons'>
+      {% for org in seg_form.origin %}
+      <label class='btn btn-xs btn-success 
+        {% if "checked" in org.tag|stringformat:"s" %} active{% endif %}'>
+        {{ org.tag }} <img class="btnicon" src='{% static org.choice_label|add:'.svg' %}'>
+      </label>
+      {% endfor %}
+    </div>
+  </div>
+  <div class='col-sm-3'>{{ seg_form.language }}</div>
+  <div class='col-sm-3'>{{ seg_form.composer }}</div>
+  <div class='col-sm-3'>
+    {{ seg_form.category_3.errors }}
+    <div class='btn-group' data-toggle='buttons'>
+      {% for cat in seg_form.category_3 %}
+      <label class='btn btn-xs btn-success 
+        {% if "checked" in cat.tag|stringformat:"s" %} active{% endif %}'>
+        {{ cat.tag }} {{ cat.choice_label }}
+      </label>
+      {% endfor %}
+    </div>
+    <div class="btn-group" data-toggle="buttons">{{ seg_form.hit.errors }}
+      <label class='btn btn-xs btn-success{% if "checked" in seg_form.hit.tag|stringformat:"s" %} active{% endif %}'>
+        {{ seg_form.hit.tag }}{{ seg_form.hit.label }}
+      </label>
+    </div>
+  </div>
+</div>
