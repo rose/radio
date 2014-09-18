@@ -1,7 +1,7 @@
 from django.forms import ModelForm, Form, TextInput, RadioSelect
 from logger.models import *
 from ajax_select import make_ajax_field
-from ajax_select.fields import AutoCompleteSelectField
+from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectWidget
 
 
 class EpisodeForm(ModelForm):
@@ -33,16 +33,42 @@ class SegmentForm(ModelForm):
 
         
 class AutoSongForm(Form):
-    Song = AutoCompleteSelectField('songs', help_text=None)
+    Song = AutoCompleteSelectField('songs',
+            widget= AutoCompleteSelectWidget(
+                channel= 'songs',
+                attrs= {
+                    'title': 'Enter Title, Artist or Composer',
+                    'placeholder': 'Enter Title, Artist or Composer' }),
+            )
+    class Meta:
+        labels = {'Song': ''}
 
 class AutoAdvertisementForm(Form):
-    Advertisement = AutoCompleteSelectField('ads', help_text=None)
+    Advertisement = AutoCompleteSelectField('ads',
+            widget= AutoCompleteSelectWidget(
+                channel= 'ads',
+                attrs= {
+                    'title': 'Enter Advertiser',
+                    'placeholder': 'Enter Advertiser'}),
+            )
 
 class AutoStationIDForm(Form):
-    StationID = AutoCompleteSelectField('ids', help_text=None)
+    StationID = AutoCompleteSelectField('ids',
+            widget= AutoCompleteSelectWidget(
+                channel= 'ids',
+                attrs= {
+                    'title': 'Enter Length',
+                    'placeholder': 'Enter Length'}),
+            )
 
 class AutoOtherForm(Form):
-    Other = AutoCompleteSelectField('others', help_text=None)
+    Other = AutoCompleteSelectField('others',
+            widget= AutoCompleteSelectWidget(
+                channel= 'others',
+                attrs= {
+                    'title': 'Enter Description',
+                    'placeholder': 'Enter Description'}),
+            )
     
 class SongForm(ModelForm):
     class Meta:
@@ -56,8 +82,13 @@ class SongForm(ModelForm):
                 'size': '16', 'placeholder': 'Composer', 
                 'title' : 'Composer'}),
             'length': TextInput(attrs={
-                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
-        }
+                'size': '8', 'placeholder': 'Length', 
+                'title' : 'Length (MM:SS)'}),
+            'category_3': RadioSelect(),
+            'origin': RadioSelect(),
+            'language': TextInput(attrs={
+                'size': '8', 'title': "Language or 'instrumental'"}),
+       }
         labels = {
             'title': '', 'artist': '', 'composer': '', 'length': '',
         }
@@ -73,6 +104,7 @@ class AdvertisementForm(ModelForm):
                 'size': '8', 'placeholder': 'Length', 
                 'title' : 'Length (MM:SS)'}),
             'category': RadioSelect(),
+            'spoken': RadioSelect(),
         }
         labels = {
             'advertiser': '', 'length': '',
@@ -83,7 +115,9 @@ class StationIDForm(ModelForm):
         model = StationID
         widgets = {
             'length': TextInput(attrs={
-                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
+                'size': '8', 'placeholder': 'Length', 
+                'title' : 'Length (MM:SS)'}),
+            'spoken': RadioSelect(),
         }
         labels = {
             'length': '',
@@ -98,7 +132,9 @@ class OtherForm(ModelForm):
                 'size': '16', 'placeholder': 'Description',
                 'title': 'Description'}),
             'length': TextInput(attrs={
-                'size': '8', 'placeholder': 'Length', 'title' : 'Length (MM:SS)'}),
+                'size': '8', 'placeholder': 'Length', 
+                'title' : 'Length (MM:SS)'}),
+            'spoken': RadioSelect(),
         }
         labels = {
             'description': '', 'length': '',
