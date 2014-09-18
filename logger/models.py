@@ -120,7 +120,7 @@ class Advertisement(Model):
     # required by section 8.1.c.v
     category = IntegerField(
             choices = (
-                (51, "Announcement"),
+                (51, "Ad"),
                 (52, "Sponsor ID"),
                 (53, "Promo")
             ),
