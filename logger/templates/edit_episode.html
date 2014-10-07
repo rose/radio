@@ -26,20 +26,26 @@
     <div id='segforms' class='tab-content'>
       {% for seg_name in ordered_names %}
       <div class='tab-pane{% if seg_name == seg_type %} active{% endif %}' id='{{ seg_name }}'>
+        <h3 class="head" id="{{ seg_name }}Type">
+          <div class='inline' id="Lookup{{ seg_name }}Title"{% if not seg_auto %} 
+            style="display:none"{% endif %}>Log Existing {{ seg_name }}</div>
+          <div class='inline' id="New{{ seg_name }}Title"{% if seg_auto %} 
+            style="display:none"{% endif %}>Create {{ seg_name }}</div>
+          <ul class='inline pull-right' id='Lookup{{ seg_name }}'>
+            <li class='label small'{% if seg_auto %} class="active" style="display:none"{% endif %}> 
+            <a href="#Auto{{ seg_name }}" onClick="switchType('#{{ seg_name }}Type', true)" data-toggle='tab'>
+              Look Up {{ seg_name }}</a>
+            </li>
+            <li class='label small'{% if not seg_auto %} style="display:none" class="active"{% endif %}> 
+            <a href="#New{{ seg_name }}" onClick="switchType('#{{ seg_name }}Type', false)" data-toggle='tab'
+              id='new_{{ seg_name }}'>
+              Create {{ seg_name }}</a>
+            </li>
+          </ul>
+        </h3>
         <form method="POST" action="">
           {% csrf_token %}
           <input type='hidden' name='seg_type' value='{{ seg_name }}'>
-          <ul class='nav nav-pills' id='Lookup{{ seg_name }}'>
-            <li{% if seg_auto %} class="active"{% endif %}> 
-              <a href="#Auto{{ seg_name }}" data-toggle='tab'>
-                Look Up {{ seg_name }}</a>
-            </li>
-            <li{% if not seg_auto %} class="active"{% endif %}> 
-              <a href="#New{{ seg_name }}" data-toggle='tab'
-                id='new_{{ seg_name }}'>
-                Create {{ seg_name }}</a>
-            </li>
-          </ul>
           <div class='tab-content formrow'>
             <div class='tab-pane{% if seg_auto %} active{% endif %}' id='Auto{{seg_name}}'> <!-- TODO activate if autoform -->
               <div class="row">

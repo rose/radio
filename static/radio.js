@@ -6,3 +6,8 @@ function enter_now(parent_elem) {
 function enter_last(parent_elem, time) {
   parent_elem.find("#id_time").val(time);
 }
+function switchType(parent_selector, newseg) {
+  parent_elem = $(parent_selector);
+  parent_elem.find("div").toggle();
+  parent_elem.find("li").toggle();
+}
