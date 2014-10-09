@@ -1,6 +1,7 @@
 from random import randint
 from datetime import date, timedelta
 from django.db.models import * # yeah, I know.  But we're using most of them.
+from django.contrib.auth.models import User
 from durationfield.db.models.fields.duration import DurationField
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey
@@ -10,13 +11,13 @@ from django.contrib.contenttypes.generic import GenericForeignKey
 # http://laws.justice.gc.ca/eng/regulations/SOR-86-982/
     
 class DJ(Model):
-    first_name = CharField(max_length=80)
-    last_name = CharField(max_length=80)
+    user = OneToOneField(User)
+    dj_name = CharField(max_length=80)
     #TODO separate validation for phone numbers
     phone = CharField(max_length=10, blank=True)
 
     def __str__(self):
-        return "%s %s (%s)" % (self.first_name, self.last_name, self.phone)
+        return "%s (%s)" % (self.dj_name, self.phone)
 
 
 class Show(Model):

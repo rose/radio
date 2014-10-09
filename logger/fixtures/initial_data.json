@@ -2,9 +2,9 @@
 {
   "pk": 1,
   "fields": {
-    "first_name": "Super",
+    "user": 1,
     "phone": "",
-    "last_name": "Freak"
+    "dj_name": "Super Freak"
   },
   "model": "logger.dj"
 },
