@@ -1,5 +1,6 @@
 import sys
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.views import redirect_to_login
 from django.views.generic import ListView, CreateView, View
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
@@ -88,12 +89,14 @@ class EditEpisodeView(CreateView):
 
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            return redirect('/admin')
         self.object = None
         self.seg_type = request.POST['seg_type']
         time = request.POST['time']
         episode_pk = self.kwargs['pk']
+        self.episode = get_object_or_404(Episode, id=episode_pk)
+        if not all((request.user.is_authenticated(), 
+            request.user.id == self.episode.show.dj.user.id)):
+                return redirect_to_login(request.path, reverse('login'))
 
         ctx = self.get_context_data(pk=episode_pk, seg_type=self.seg_type)
 
@@ -112,7 +115,7 @@ class EditEpisodeView(CreateView):
             created_sub = content_form.save() 
 
         segargs = {
-            'episode': get_object_or_404(Episode, id=episode_pk),
+            'episode': self.episode,
             'time': time, 
             'seg_type': ContentType.objects.get_for_model(created_sub.__class__),
             'seg_id': created_sub.pk
