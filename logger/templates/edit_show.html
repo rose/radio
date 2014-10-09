@@ -12,6 +12,7 @@
 
 {% block content %}
 <h2>{{ show }}</h2>
+{% if user.id == show.dj.user.id %}
 <form method="POST" action="">
   {% csrf_token %}
   <ul class="list-inline">
@@ -19,6 +20,7 @@
     <input class="btn btn-primary" type="submit" id='create_episode' value="Create Episode">
   </ul>
 </form>
+{% endif %}
 
 <ul>
   {% for episode in episode_list %}

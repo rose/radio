@@ -13,6 +13,7 @@
     {% block content %}
     <h2>{{episode}}</h2>
 
+    {% if user.id == episode.show.dj.user.id %}
     <ul class='nav nav-tabs'>
       {% for seg_name in ordered_names %}
       <li{% if seg_name == seg_type %} class='active'{% endif %}>
@@ -84,6 +85,7 @@
       </div>
       {% endfor %}
     </div>
+    {% endif %}
     <div class='container' id='segment_list'>
       {% for segment in segment_list %}
       {% include segment.seg_content.cname|add:".html" %}
