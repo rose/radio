@@ -1,5 +1,5 @@
 import sys
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, View
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
@@ -87,8 +87,9 @@ class EditEpisodeView(CreateView):
         return content_form
 
 
-
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return redirect('/admin')
         self.object = None
         self.seg_type = request.POST['seg_type']
         time = request.POST['time']
