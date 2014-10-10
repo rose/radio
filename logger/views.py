@@ -1,5 +1,6 @@
 import sys
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import logout
 from django.contrib.auth.views import redirect_to_login
 from django.views.generic import ListView, CreateView, View
 from django.core.urlresolvers import reverse
@@ -16,6 +17,15 @@ class ListShowView(ListView):
 class EditShowView(CreateView):
     template_name = "edit_show.html"
     form_class = EpisodeForm
+
+    def post(self, request, *args, **kwargs):
+        show_pk = self.kwargs['pk']
+        self.show = get_object_or_404(Show, id=show_pk)
+        if not all((request.user.is_authenticated(), 
+            request.user.id == self.show.dj.user.id)):
+                return redirect_to_login(request.path, reverse('login'))
+        else:
+            return super(EditShowView, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super(EditShowView, self).get_context_data(**kwargs)
@@ -130,4 +140,6 @@ class EditEpisodeView(CreateView):
         ctx['form'] = SegmentForm()
         return self.render_to_response(ctx)
 
-
+def logout_view(request):
+    logout(request)
+    return redirect_to_login(request.META['HTTP_REFERER'], reverse('login'))

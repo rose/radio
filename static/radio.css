@@ -3,3 +3,10 @@
 .btnicon {width:1.3em; height:1.3em;}
 .inline {display: inline-block;}
 .label {background: blue}
+.no-gutter [class*="col-"] {
+      padding-left:0;
+      padding-right:0;
+      margin-left:-2px;
+      margin-right:-2px;
+    }
+.right {text-align:right;}
