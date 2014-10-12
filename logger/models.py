@@ -17,7 +17,7 @@ class DJ(Model):
     phone = CharField(max_length=10, blank=True)
 
     def __str__(self):
-        return "%s (%s)" % (self.dj_name, self.phone)
+        return self.dj_name
 
 
 class Show(Model):
@@ -37,7 +37,7 @@ class Show(Model):
     # TODO does section C apply to CHCR or are we always X?
 
     def __str__(self):
-        return "Show:  %s %s" % (self.title, self.dj)
+        return "%s with %s" % (self.title, self.dj)
 
 
 class Stat(Model):
@@ -103,7 +103,7 @@ class Episode(Model):
         return self.air_time.strftime("%H:%M") 
 
     def __str__(self):
-        return "%s (%s %s)" % (self.show.title, self.air_date, self.air_time)
+        return "%s (%s %s:%02d)" % (self.show.title, self.air_date, self.air_time.hour, self.air_time.minute)
 
 
 # Segment categories, corresponding roughly to CRTC guidelines and
@@ -132,7 +132,7 @@ class Advertisement(Model):
       return self.__class__.__name__
     
     def __str__(self):
-        return "Ad:  %s, Category %d" % (self.advertiser, self.category)
+        return "%s, %s [%s]" % (self.get_category_display(), self.advertiser, str(self.length)[2:7])
 
 
 # categories 2 and 3
@@ -165,7 +165,7 @@ class Song(Model):
       return self.__class__.__name__
 
     def __str__(self):
-        return "Song: %s (%s) [%s]" % (self.title, self.artist, str(self.length)[:7])
+        return "%s (%s) [%s]" % (self.title, self.artist, str(self.length)[2:7])
 
 
 # category 1 (if spoken) or 4 (if recorded musical)
@@ -175,6 +175,7 @@ class StationID(Model):
             default=True,
         )
 
+    description = CharField(max_length=120)
     length = DurationField()
 
     def cname(self):
@@ -182,9 +183,9 @@ class StationID(Model):
 
     def __str__(self):
         if self.spoken:
-            return "STID: Spoken"
+            return "Spoken ID: %s %s" % (self.description, str(self.length)[2:7])
         else:
-            return "STID: Musical"
+            return "Musical ID: %s %s" % (self.description, str(self.length)[2:7])
 
 
 # category 1 (spoken) or 4 (prerecorded musical, eg show themes or contest promotions)
@@ -202,7 +203,7 @@ class Other(Model):
       return self.__class__.__name__
 
     def __str__(self):
-        return "Other: %s" % self.description
+        return "%s [%s]" % (self.description, str(self.length)[:7])
 
 
 class Segment(Model):
