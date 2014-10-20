@@ -117,10 +117,14 @@ class StationIDForm(ModelForm):
             'length': TextInput(attrs={
                 'size': '8', 'placeholder': 'Length', 
                 'title' : 'Length (MM:SS)'}),
+            'description' : TextInput(attrs={
+                'size': '16', 'placeholder': 'Description',
+                'title': 'Description'}),
             'spoken': RadioSelect(),
         }
         labels = {
             'length': '',
+            'description': '',
         }
 
 

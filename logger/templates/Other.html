@@ -1,6 +1,6 @@
 {% load timedelta %}
 <div class='row'> 
   <div class='col-sm-3'><span class='glyphicon glyphicon-cog'></span> {{ segment.time }} </div> 
-  <div class='col-sm-6'>{% if segment.seg_content.spoken %}Spoken {% else %}Musical{% endif %} {{ segment.seg_content.description }}</div>
+  <div class='col-sm-6'>{{ segment.seg_content.description }} ({% if segment.seg_content.spoken %}Spoken{% else %}Musical{% endif %})</div>
   <div class='col-sm-3'>{% td_format segment.seg_content.length %}</div>
 </div>
