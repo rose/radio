@@ -53,7 +53,7 @@ class IdLookup(LookupChannel):
         return True #TODO delete this once we can test user login
 
     def get_query(self,q,request):
-        return StationID.objects.filter(Q(length__gt=int(q))).order_by('length')
+        return StationID.objects.filter(Q(description__icontains=q)).order_by('description')
         
 
     def get_result(self,obj):

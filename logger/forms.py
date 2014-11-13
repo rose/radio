@@ -57,8 +57,8 @@ class AutoStationIDForm(Form):
             widget= AutoCompleteSelectWidget(
                 channel= 'ids',
                 attrs= {
-                    'title': 'Enter Length',
-                    'placeholder': 'Enter Length'}),
+                    'title': 'Enter Description',
+                    'placeholder': 'Enter Description'}),
             )
 
 class AutoOtherForm(Form):
