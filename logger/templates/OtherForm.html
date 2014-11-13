@@ -4,7 +4,7 @@
     {{ seg_form.spoken.errors }}
     <div class='btn-group' data-toggle='buttons'>
       {% for sp in seg_form.spoken %}
-      <label class='btn btn-sm btn-success 
+      <label class='btn btn-xs btn-success 
         {% if "checked" in sp.tag|stringformat:"s" %} active{% endif %}'>
          {{ sp.tag }} <img class="btnicon" src="{% static sp.choice_label|add:'.svg' %}" title="{{ sp.choice_label }}">
       </label>
