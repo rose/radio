@@ -67,7 +67,8 @@
           </div>
           <div class="logrow">
             <div class="row">
-              <div class="col-sm-3">{{ form.time }}<br>
+              <div class="col-sm-3">{{ form.time.errors }}
+                  {{ form.time }}<br>
                 <span class="btn-xs btn-primary" 
                   onClick='enter_now($("#{{ seg_name }}"))'>Now
                 </span>&nbsp;

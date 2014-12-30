@@ -1,9 +1,11 @@
 {% load staticfiles %}
 <div class='row'>
   <div class='col-sm-3'></div>
-  <div class='col-sm-3'>{{ seg_form.title }}</div>
-  <div class='col-sm-3'>{{ seg_form.artist }}</div>
-  <div class='col-sm-3'>{{ seg_form.length }}</div>
+  <div class='col-sm-3'>{{ seg_form.title.errors }}
+    {{ seg_form.title }}</div>
+  <div class='col-sm-3'>{{ seg_form.artist.errors }}
+    {{ seg_form.artist }}</div>
+  <div class='col-sm-3'>{{ seg_form.length.errors }}{{ seg_form.length }}</div>
 </div>
 <div class='row'>
    <div class='col-sm-3'>
@@ -17,8 +19,10 @@
       {% endfor %}
     </div>
   </div>
-  <div class='col-sm-3'>{{ seg_form.language }}</div>
-  <div class='col-sm-3'>{{ seg_form.composer }}</div>
+  <div class='col-sm-3'>{{ seg_form.language.errors }}
+    {{ seg_form.language }}</div>
+  <div class='col-sm-3'>{{ seg_form.composer.errors }}
+    {{ seg_form.composer }}</div>
   <div class='col-sm-3'>
     {{ seg_form.category_3.errors }}
     <div class='btn-group' data-toggle='buttons'>
